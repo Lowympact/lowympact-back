@@ -6,8 +6,6 @@ const auth = require('../util/auth');
 const router = express.Router();
 
 
-// router.post('/', XXXX);
-
 router.post('/signup',
 [
 		check('name').not().isEmpty(),
@@ -18,6 +16,15 @@ router.post('/signup',
 	usersControllers.signUp
 );
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
 router.get('/', auth.allowIfLoggedin, auth.grantAccess('readAllProfiles'), usersControllers.getUsers);
 
 router.get('/:userId', auth.allowIfLoggedin, auth.grantAccess('readOwnProfile'), usersControllers.getUserById);

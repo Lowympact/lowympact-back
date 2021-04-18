@@ -13,6 +13,26 @@ const HttpError = require('./models/HttpError');
 
 const app = express();
 
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerOptions = {
+	swaggerDefinition: {
+		info: {
+			title: "Lowympact API",
+			description: "A Long Duration Project in 4th year at INSA Lyon - Lowympact is a food traceability application on top of Ethereum's blockchain",
+			contact: {
+				name: "HexaOne"
+			},
+			servers: ["https://thibautgravey.fr:8080"]
+		}
+	},
+	apis: ["server.js", './routes/*.js']
+}
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(bodyParser.json());
 
@@ -28,7 +48,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:5000', 'https://corentinbranchereau.com/', 'https://www.thibautgravey.fr/r'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8080', 'https://corentinbranchereau.com/', 'https://www.thibautgravey.fr/'];
 app.use(cors({
 	origin: function(origin, callback){
 		// allow requests with no origin 
