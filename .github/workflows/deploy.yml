@@ -27,6 +27,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: |
-        cd insa/smart-api
-        ls
+        script: ls
