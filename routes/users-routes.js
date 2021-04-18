@@ -18,7 +18,7 @@ router.post('/signup',
 
 /**
  * @swagger
- * /:
+ * /api/users/:
  *   get:
  *     description: Welcome to swagger-jsdoc!
  *     responses:

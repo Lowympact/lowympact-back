@@ -36,7 +36,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(bodyParser.json());
 
-
 app.use((req, res, next) => {
 	res.setHeader(
 		'Access-Control-Allow-Headers',
@@ -48,17 +47,19 @@ app.use((req, res, next) => {
 	next();
 });
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:5000', 'http://localhost:8080', 'https://corentinbranchereau.com/', 'https://www.thibautgravey.fr/'];
+const allowedOrigins = ['http://localhost:8080', 'http://api.lowympact.fr', 'https://api.lowympact.fr'];
 app.use(cors({
-	origin: function(origin, callback){
-		// allow requests with no origin 
+	origin: function(origin, callback) {
+		// allow requests with no origin
 		// (like mobile apps or curl requests)
-		// if (!origin) return callback(null, true);
+		if (!origin) return callback(null, true);
+
 		if (allowedOrigins.indexOf(origin) === -1){
 			var msg = 'The CORS policy for this site does not ' +
 						'allow access from the specified Origin.';
 			return callback(new Error(msg), false);
 		}
+
 		return callback(null, true);
 	}
 }));
@@ -90,13 +91,22 @@ app.use(async (req, res, next) => {
 	}
 });
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Verify API's availability
+ *     responses:
+ *       200:
+ *         description: Lowympact API is Online
+ */
+app.get('/',function(req, res) {
+	res.status(200);
+	res.json({ message : 'Lowympact API is Online!'});
+});
 
 app.use('/api/users', userRoutes);
 app.use('/api/passwordreset', passwordResetRoutes);
-
-app.get('/api',() => {
-	throw new HttpError('Please enter a valid route', 404);
-});
 
 app.use((req, res, next) => {
 	console.log(req,res);
@@ -112,21 +122,19 @@ app.use((error, req, res, next) => {
 	res.json({ message: error.message || 'An unknown error occurred!' });
 });
 
-app.listen(8080, () => console.log("Lowympact API started"));
-
-/*mongoose
+mongoose
 	.connect(
-		'mongodb+srv://',
+		'mongodb+srv://lowympactBack:'+process.env.MONGODBPWD+'@cluster0.sx8sg.mongodb.net/lowympact?retryWrites=true&w=majority',
 		{
 			useNewUrlParser: true, 
 			useUnifiedTopology: true,
 			useCreateIndex: true,
 		})
 	.then(() => {
-		app.listen(8000);
-		console.log("Connected to the Lowympact DATABASE");
+		app.listen(8080);
+		console.log("Connected to the Lowympact MongoDB");
+		console.log("Lowympact API started")
 	})
 	.catch(err => {
 		console.log(err);
 	});
-*/
