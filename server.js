@@ -25,7 +25,7 @@ const swaggerOptions = {
       contact: {
         name: "HexaOne",
       },
-      servers: ["https://thibautgravey.fr:8080"],
+      servers: ["https://api.lowympact.fr/"],
     },
   },
   apis: ["server.js", "./routes/*.js"],
@@ -50,6 +50,7 @@ app.use((req, res, next) => {
 
 const allowedOrigins = [
   "http://localhost:8080",
+  "https://localhost:8080",
   "http://api.lowympact.fr",
   "https://api.lowympact.fr",
 ];
@@ -83,11 +84,9 @@ app.use(async (req, res, next) => {
 
       // Check if token has expired
       if (exp < Date.now().valueOf() / 1000) {
-        return res
-          .status(401)
-          .json({
-            error: "JWT token has expired, please login to obtain a new one",
-          });
+        return res.status(401).json({
+          error: "JWT token has expired, please login to obtain a new one",
+        });
       }
       try {
         res.locals.loggedInUser = await User.findById(userId);
