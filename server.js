@@ -27,7 +27,7 @@ const swaggerOptions = {
       contact: {
         name: "HexaOne",
       },
-      servers: ["https://thibautgravey.fr:8080"],
+      servers: ["https://api.lowympact.fr/"],
     },
   },
   apis: ["server.js", "./routes/*.js"],
@@ -52,6 +52,7 @@ app.use((req, res, next) => {
 
 const allowedOrigins = [
   "http://localhost:8080",
+  "https://localhost:8080",
   "http://api.lowympact.fr",
   "https://api.lowympact.fr",
 ];
