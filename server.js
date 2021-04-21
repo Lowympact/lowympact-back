@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -12,6 +13,7 @@ const User = require("./models/User");
 const HttpError = require("./models/HttpError");
 
 const app = express();
+//! app.use(express.static('build/contracts')); cf. https://techbrij.com/web-ui-smart-contract-ethereum-dapp-part-4
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -83,11 +85,9 @@ app.use(async (req, res, next) => {
 
       // Check if token has expired
       if (exp < Date.now().valueOf() / 1000) {
-        return res
-          .status(401)
-          .json({
-            error: "JWT token has expired, please login to obtain a new one",
-          });
+        return res.status(401).json({
+          error: "JWT token has expired, please login to obtain a new one",
+        });
       }
       try {
         res.locals.loggedInUser = await User.findById(userId);
