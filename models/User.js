@@ -1,22 +1,60 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const userSchema = new mongoose.Schema({
-	name: { type: String, required: true },
-	firstname: { type: String, required: true },
-	mail: { type: String, required: true },
-	pwd: { type: String, required: true },
-	pwdResetDate: { type: Date}, // pwd reset date
-	pwdResetToken: { type: String }, //pwd reset token
-	phone: { type: String },
-	status: { type: String, enum: ['admin', 'operator', 'user'], default: 'user' },
-	places: [{
-		role: { type: String, enum: ['owner', 'manager', 'waiter'] },		//if operator, the status he has in the bar
-		barId: { type: Schema.Types.ObjectId, ref: 'Bar' }
-	}],
-	//check: { type: Number, enum: [0, 1], default: '0' },					//1 = mail is valid
-	lastConnection: { type: Date, default: Date.now },
-	creationDate: { type: Date, default: Date.now }
+const UserSchema = new mongoose.Schema({
+  userName: {
+    type: String,
+    required: [true, "Please add a name"],
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: [true, "Please add an email"],
+    unique: true,
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Please add a valid email",
+    ],
+  },
+  role: {
+    type: String,
+    enum: ["proprietaire", "utilisateur", "admin", "tenant"],
+    required: true,
+  },
+  password: {
+    type: String,
+    required: [true, "Please add a password"],
+    minlength: 6,
+    select: false, // not return the password
+  },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('User', userSchema);
+//Encrypt password
+UserSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  //middleware has access to the fields
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+//Sign JWT and return
+UserSchema.methods.getSignedJwtToken = function () {
+  //we have access to the user id since this is a method
+  //options: expiresIn
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+};
+
+//Match user entered password to hashed password in DB
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+module.exports = mongoose.model("User", UserSchema);

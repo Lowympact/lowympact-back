@@ -1,13 +1,22 @@
-require("dotenv").config(); // load env var
+const path = require("path");
+const dotenv = require("dotenv");
 const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const PORT = process.env.port || 8080; //default : 8080
-const connectDB = require("./connection/db.js");
-const connectBC = require("./connection/bc.js");
+const morgan = require("morgan");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+const errorHandler = require("./middleware/error");
+const connectDB = require("./connection/db");
+const connectBC = require("./connection/bc");
 const app = express();
+
+// Set PORT (default:8080)
+const PORT = process.env.port || 8080;
+
+// Load env var
+dotenv.config({ path: ".env" });
 
 // Connect to Blockchain
 connectBC();
@@ -15,56 +24,17 @@ connectBC();
 // Connect to MongoDB
 connectDB();
 
-// Swagger
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
-
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: "Lowympact API",
-      description:
-        "A HexaOne's project made at INSA Lyon - Lowympact is a food traceability application on top of Ethereum's blockchain",
-      contact: {
-        name: "HexaOne",
-      },
-      servers: ["https://api.lowympact.fr/"],
-    },
-  },
-  apis: ["server.js", "./routes/*.js"],
-};
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 // Import routes files
-const userRoutes = require("./routes/users-routes");
-const passwordResetRoutes = require("./routes/passwordReset-routes");
+const userRouter = require("./routes/user");
 
-const HttpError = require("./models/HttpError");
-
-// ?
-app.use(bodyParser.json());
-
-// ?
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token"
-  );
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-
-  next();
-});
-
-// ?
+// CORS
 const allowedOrigins = [
   "http://localhost:" + PORT,
   "https://localhost:" + PORT,
   "http://api.lowympact.fr",
   "https://api.lowympact.fr",
 ];
+
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -83,6 +53,61 @@ app.use(
     },
   })
 );
+
+// Body parser
+app.use(express.json()); //to support JSON-encoded bodies
+
+// Cookie parser
+app.use(cookieParser());
+
+// Dev logging middleware
+if (process.env.MODE === "development") app.use(morgan("dev"));
+
+// Sanitize data
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Prevent XSS attacks
+app.use(xss());
+
+// Set static folder
+// __dirname is the current directory
+app.use(express.static(path.join(__dirname, "public")));
+
+// Mount routes
+app.use("/api/v1/users", userRouter);
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Verify API's availability
+ *     responses:
+ *       200:
+ *         description: Lowympact API is Online
+ */
+app.get("/", function (req, res) {
+  res.status(200);
+  res.json({ message: "Lowympact API is Online!" });
+});
+
+//Custom error handler
+app.use(errorHandler);
+
+// ?
+/*
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token"
+  );
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+  next();
+});
 
 app.use(async (req, res, next) => {
   if (req.headers["x-access-token"]) {
@@ -115,31 +140,11 @@ app.use(async (req, res, next) => {
   }
 });
 
-/**
- * @swagger
- * /:
- *   get:
- *     description: Verify API's availability
- *     responses:
- *       200:
- *         description: Lowympact API is Online
- */
-app.get("/", function (req, res) {
-  res.status(200);
-  res.json({ message: "Lowympact API is Online!" });
-});
-
-// Mount routes
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/passwordreset", passwordResetRoutes);
-
-// ?
 app.use((req, res, next) => {
   console.log(req, res);
   throw new HttpError("Could not find this route.", 404);
 });
 
-// ?
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
@@ -147,6 +152,7 @@ app.use((error, req, res, next) => {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred!" });
 });
+*/
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.MODE} on port ${PORT}`);
