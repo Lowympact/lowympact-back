@@ -8,6 +8,7 @@ const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const errorHandler = require("./middleware/error");
+const swagger = require("./doc/swagger");
 const connectDB = require("./connection/db");
 const connectBC = require("./connection/bc");
 const app = express();
@@ -23,6 +24,9 @@ connectBC();
 
 // Connect to MongoDB
 connectDB();
+
+// Swagger
+swagger();
 
 // Import routes files
 const userRouter = require("./routes/user");
