@@ -13,10 +13,11 @@
     "swagger-ui-express": "^4.1.6"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "set MODE=production && node server",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "nodemon server"
   },
   "eslintConfig": {
     "extends": "react-app"
