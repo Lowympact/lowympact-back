@@ -8,7 +8,8 @@ const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 const errorHandler = require("./middleware/error");
-const swagger = require("./doc/swagger");
+const swaggerInit = require("./doc/swagger");
+const swaggerUi = require("swagger-ui-express");
 const connectDB = require("./connection/db");
 const connectBC = require("./connection/bc");
 const app = express();
@@ -26,7 +27,7 @@ connectBC();
 connectDB();
 
 // Swagger
-swagger();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 
 // Import routes files
 const userRouter = require("./routes/user");
