@@ -19,7 +19,7 @@ const PORT = process.env.port || 8080;
 // Load env var
 dotenv.config({ path: ".env" });
 
-// Connect to Blockchain
+// Connect to the Blockchain
 connectBC();
 
 // Connect to MongoDB
