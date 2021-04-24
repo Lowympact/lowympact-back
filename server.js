@@ -4,6 +4,12 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
+const PORT = process.env.port || 8080; //default : 8080
+
+// *** Blockchain ***
+const Web3 = require("web3");
+var provider = new Web3.providers.HttpProvider(process.env.LOCAL_NODE);
+const contract = require("@truffle/contract");
 
 const userRoutes = require("./routes/users-routes");
 const passwordResetRoutes = require("./routes/passwordReset-routes");
@@ -13,7 +19,6 @@ const User = require("./models/User");
 const HttpError = require("./models/HttpError");
 
 const app = express();
-//! app.use(express.static('build/contracts')); cf. https://techbrij.com/web-ui-smart-contract-ethereum-dapp-part-4
 
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
@@ -51,8 +56,8 @@ app.use((req, res, next) => {
 });
 
 const allowedOrigins = [
-  "http://localhost:8080",
-  "https://localhost:8080",
+  "http://localhost:" + PORT,
+  "https://localhost:" + PORT,
   "http://api.lowympact.fr",
   "https://api.lowympact.fr",
 ];
@@ -148,9 +153,13 @@ mongoose
     }
   )
   .then(() => {
-    app.listen(8080);
+    app.listen(PORT, () => {
+      console.log(
+        `Lowympact API running in ${process.env.MODE} on port ${PORT}`
+      );
+    });
     console.log("Connected to the Lowympact MongoDB");
-    console.log("Lowympact API started");
+    console.log("Connected to the Lowympact Blockchain");
   })
   .catch((err) => {
     console.log(err);
