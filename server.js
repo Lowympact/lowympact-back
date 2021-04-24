@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const PORT = process.env.port || 8080; //default : 8080
 const connectDB = require("./connection/db.js");
 const connectBC = require("./connection/bc.js");
+const app = express();
 
 // Connect to Blockchain
 connectBC();
@@ -14,17 +15,7 @@ connectBC();
 // Connect to MongoDB
 connectDB();
 
-// Import routes files
-
-const userRoutes = require("./routes/users-routes");
-const passwordResetRoutes = require("./routes/passwordReset-routes");
-
-const User = require("./models/User");
-
-const HttpError = require("./models/HttpError");
-
-const app = express();
-
+// Swagger
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
@@ -44,11 +35,18 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+// Import routes files
+const userRoutes = require("./routes/users-routes");
+const passwordResetRoutes = require("./routes/passwordReset-routes");
+
+const HttpError = require("./models/HttpError");
+
+// ?
 app.use(bodyParser.json());
 
+// ?
 app.use((req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -60,6 +58,7 @@ app.use((req, res, next) => {
   next();
 });
 
+// ?
 const allowedOrigins = [
   "http://localhost:" + PORT,
   "https://localhost:" + PORT,
@@ -130,14 +129,17 @@ app.get("/", function (req, res) {
   res.json({ message: "Lowympact API is Online!" });
 });
 
-app.use("/api/users", userRoutes);
-app.use("/api/passwordreset", passwordResetRoutes);
+// Mount routes
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/passwordreset", passwordResetRoutes);
 
+// ?
 app.use((req, res, next) => {
   console.log(req, res);
   throw new HttpError("Could not find this route.", 404);
 });
 
+// ?
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
