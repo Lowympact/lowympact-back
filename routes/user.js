@@ -21,7 +21,7 @@ router.use(authorize("admin"));
 
 /**
  * @swagger
- * /api/users/:
+ * /api/v1/users/:
  *   get:
  *     description: Welcome to swagger-jsdoc!
  *     responses:
