@@ -1,15 +1,20 @@
-require("dotenv").config();
+require("dotenv").config(); // load env var
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const PORT = process.env.port || 8080; //default : 8080
+const connectDB = require("./connection/db.js");
+const connectBC = require("./connection/bc.js");
 
-// *** Blockchain ***
-const Web3 = require("web3");
-var provider = new Web3.providers.HttpProvider(process.env.LOCAL_NODE);
-const contract = require("@truffle/contract");
+// Connect to Blockchain
+connectBC();
+
+// Connect to MongoDB
+connectDB();
+
+// Import routes files
 
 const userRoutes = require("./routes/users-routes");
 const passwordResetRoutes = require("./routes/passwordReset-routes");
@@ -141,26 +146,6 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-mongoose
-  .connect(
-    "mongodb+srv://lowympactBack:" +
-      process.env.MONGODBPWD +
-      "@cluster0.sx8sg.mongodb.net/lowympact?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    }
-  )
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(
-        `Lowympact API running in ${process.env.MODE} on port ${PORT}`
-      );
-    });
-    console.log("Connected to the Lowympact MongoDB");
-    console.log("Connected to the Lowympact Blockchain");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.MODE} on port ${PORT}`);
+});
