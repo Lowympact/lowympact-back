@@ -28,5 +28,5 @@ jobs:
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
         script: |
-        cd insa/smart-api
-        npm run prodrestart
+          cd insa/smart-api
+          npm run prodrestart
