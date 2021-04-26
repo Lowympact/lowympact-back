@@ -3,10 +3,7 @@ const express = require("express");
 const paginationFiltering = require("../middleware/paginationFiltering");
 const { protect, authorize } = require("../middleware/auth");
 
-const {
-  getProducts,
-  getProduct,
-} = require("../controllers/product");
+const { getProduct } = require("../controllers/product");
 
 const Product = require("../models/product");
 
@@ -18,14 +15,30 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/products/:
+ * /api/v1/products/{barcode}:
  *   get:
- *     description: Get every products
+ *     summary: Gets a product by barcode
+ *     description: >
+ *        A detailed description of the product identified by barcode.
+ *        If the **bcProductId** is passed by parameter, add
+ *        traceability information on response
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *      - name: barcode
+ *        in: path
+ *        description: Product Barcode
+ *        type: integer
+ *        required: true
+ *      - name: bcProductId
+ *        in: query
+ *        description: Product Blockchain ID
+ *        type: integer
+ *        required: false
  *     responses:
  *       200:
- *         description: Returns every products
+ *         description: OK
  */
-router.route("/").get(paginationFiltering(Product), getProducts).get(getProducts);
 router.route("/:barcode/:bcProductId").get(getProduct);
 
 module.exports = router;

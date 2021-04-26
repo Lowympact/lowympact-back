@@ -90,10 +90,11 @@ app.use("/api/v1/products", productRouter);
  * @swagger
  * /:
  *   get:
- *     description: Verify API's availability
+ *     summary: Verify API's availability
+ *     description: Check if the API is available at the moment
  *     responses:
  *       200:
- *         description: Lowympact API is Online
+ *         description: OK
  */
 app.get("/", function (req, res) {
   res.status(200);
