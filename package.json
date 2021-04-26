@@ -18,6 +18,9 @@
   },
   "scripts": {
     "start": "set MODE=production && node server",
+    "prodstart" : "set MODE=production && forever start --minUptime 1000 --spinSleepTime 1000 server.js",
+    "prodrestart" : "set MODE=production && forever restart --minUptime 1000 --spinSleepTime 1000 server.js",
+    "prodstop" : "forever stop server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
