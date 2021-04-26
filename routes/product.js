@@ -4,14 +4,11 @@ const paginationFiltering = require("../middleware/paginationFiltering");
 const { protect, authorize } = require("../middleware/auth");
 
 const {
-  getUsers,
-  getUser,
-  createUser,
-  updateUser,
-  deleteUser,
-} = require("../controllers/user");
+  getProducts,
+  getProduct,
+} = require("../controllers/product");
 
-const User = require("../models/user");
+const Product = require("../models/product");
 
 const router = express.Router();
 
@@ -21,13 +18,13 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/users/:
+ * /api/v1/products/:
  *   get:
- *     description: Welcome to swagger-jsdoc!
+ *     description: Get every products
  *     responses:
  *       200:
- *         description: Returns a mysterious string.
+ *         description: Returns every products
  */
-router.route("/").get(paginationFiltering(User), getUsers).get(getUsers);
+router.route("/").get(paginationFiltering(Product), getProducts).get(getProducts);
 
 module.exports = router;

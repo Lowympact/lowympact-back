@@ -2,7 +2,7 @@ const Product = require("../models/product");
 
 /*  GET */
 
-exports.getUsers = async (req, res, next) => {
+exports.getProducts = async (req, res, next) => {
   let query;
 
   try {
@@ -30,12 +30,12 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
-exports.getUser = async (req, res, next) => {
+exports.getProduct = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    //const user = await User.findById(req.params.id);
     res.status(200).json({
       success: true,
-      data: user,
+      //data: user,
     });
   } catch (err) {
     next(err);
@@ -44,45 +44,6 @@ exports.getUser = async (req, res, next) => {
 
 /*  POST */
 
-exports.createUser = async (req, res, next) => {
-  try {
-    const user = await User.create(req.body);
-    res.status(201).json({
-      success: true,
-      data: user,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
 /*  PUT */
 
-exports.updateUser = async (req, res, next) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    res.status(201).json({
-      success: true,
-      data: user,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
 /*  DELETE */
-
-exports.deleteUser = async (req, res, next) => {
-  try {
-    await User.findByIdAndDelete(req.params.id);
-    res.status(200).json({
-      success: true,
-      data: {},
-    });
-  } catch (err) {
-    next(err);
-  }
-};

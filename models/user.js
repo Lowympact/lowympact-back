@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-//TODO : this comment has to be deleted later
+
 const UserSchema = new mongoose.Schema({
   userName: {
     type: String,

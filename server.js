@@ -31,6 +31,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 
 // Import routes files
 const userRouter = require("./routes/user");
+const productRouter = require("./routes/product");
 
 // CORS
 const allowedOrigins = [
@@ -83,6 +84,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routes
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/products", productRouter);
 
 /**
  * @swagger
