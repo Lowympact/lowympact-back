@@ -26,5 +26,6 @@ const router = express.Router();
  *         description: Returns every products
  */
 router.route("/").get(paginationFiltering(Product), getProducts).get(getProducts);
+router.route("/:barcode/:bcProductId").get(getProduct);
 
 module.exports = router;
