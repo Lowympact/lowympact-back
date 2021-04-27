@@ -1,6 +1,6 @@
 const Product = require("../models/product");
 const { reverseGeocoder } = require("../util/geocoder");
-const truffle_connect = require("../connection/bc.js");
+const Transaction = require("../contracts/transaction");
 
 /*  GET */
 
@@ -10,7 +10,7 @@ exports.getProduct = async (req, res, next) => {
         if (req.query.bcProductId) {
             console.log("QRCODE - Traçabilité");
             /*
-            truffle_connect.backTrackProduct(function (answer) {
+            Transaction.getProductHistory(function (answer) {
                 res.status(200).json({
                     success: true,
                     data: answer,
