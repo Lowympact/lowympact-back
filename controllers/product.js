@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const { reverseGeocoder } = require("../util/geocoder");
 const truffle_connect = require("../connection/bc.js");
 
 /*  GET */
@@ -16,8 +17,10 @@ exports.getProduct = async (req, res, next) => {
                 });
             });
             */
+            let geocoderTest = await reverseGeocoder(45.78264, 4.878073);
             res.status(200).json({
                 success: true,
+                geocoder: geocoderTest,
             });
         } else {
             console.log("BARCODE - Impact");
