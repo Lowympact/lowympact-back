@@ -2,16 +2,19 @@ const express = require("express");
 
 const paginationFiltering = require("../middleware/paginationFiltering");
 const { protect, authorize } = require("../middleware/auth");
+const { checkApiKey } = require("../middleware/apiKey");
 
 const { getProduct } = require("../controllers/product");
 
 const Product = require("../models/product");
+const { check } = require("express-validator");
 
 const router = express.Router();
 
 // anything below will use the middleware
-// router.use(protect);
-// router.use(authorize("admin"));
+//router.use(protect);
+//router.use(authorize("admin"));
+router.use(checkApiKey);
 
 /**
  * @swagger
@@ -25,6 +28,13 @@ const router = express.Router();
  *     produces:
  *      - application/json
  *     parameters:
+ *      - name: authorization
+ *        in: header
+ *        description: API-Key with Bearer prefix
+ *        schema:
+ *          type: string
+ *          format: uuid
+ *        required: true
  *      - name: barcode
  *        in: path
  *        description: Product Barcode
@@ -39,6 +49,6 @@ const router = express.Router();
  *       200:
  *         description: OK
  */
-router.route("/:barcode/:bcProductId").get(getProduct);
+router.route("/:barcode").get(getProduct);
 
 module.exports = router;

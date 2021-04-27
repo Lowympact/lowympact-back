@@ -3,13 +3,7 @@ const express = require("express");
 const paginationFiltering = require("../middleware/paginationFiltering");
 const { protect, authorize } = require("../middleware/auth");
 
-const {
-  getUsers,
-  getUser,
-  createUser,
-  updateUser,
-  deleteUser,
-} = require("../controllers/user");
+const { getUsers, getUser, createUser, updateUser, deleteUser } = require("../controllers/user");
 
 const User = require("../models/user");
 
