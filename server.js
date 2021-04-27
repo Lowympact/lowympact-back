@@ -30,7 +30,7 @@ connectDB();
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 
 // Import routes files
-const userRouter = require("./routes/user");
+// const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 
 // CORS
@@ -83,7 +83,7 @@ app.use(xss());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routes
-app.use("/api/v1/users", userRouter);
+//app.use("/api/v1/users", userRouter);
 app.use("/api/v1/products", productRouter);
 
 /**
