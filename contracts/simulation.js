@@ -9,6 +9,8 @@ var Transaction_contract = contract(Transaction_artifact);
 const Actor_artifact = require("./builds/transaction.json");
 var Actor_contract = contract(Transaction_artifact);
 
+const ActorModel = require("../models/actor");
+
 module.exports = {
     //? Scénario :
     // - Créer 3 acteurs
@@ -16,7 +18,7 @@ module.exports = {
     // - Retrouver l'origine du produit à partir de son id donné
 
     main: async function (web3) {
-        const BAR1 = await Actor.createActor(
+        const { walletAddressBAR1, BAR1 } = await Actor.createActor(
             "BAR-85025 ",
             "Barilla Protenza",
             "producer",
@@ -25,7 +27,12 @@ module.exports = {
             web3
         );
 
-        const CAR1 = await Actor.createActor(
+        const actorBAR1Model = ActorModel.create({
+            actorName: "BAR1",
+            actorWalletAddress: walletAddressBAR1,
+        });
+
+        const { walletAddressCAR1, CAR1 } = await Actor.createActor(
             "CAR-69100",
             "Carrefour Villeurbanne",
             "maker",
@@ -34,7 +41,12 @@ module.exports = {
             web3
         );
 
-        const CAR2 = await Actor.createActor(
+        const actorBAR1Model = ActorModel.create({
+            actorName: "CAR1",
+            actorWalletAddress: walletAddressCAR1,
+        });
+
+        const { walletAddressCAR2, CAR2 } = await Actor.createActor(
             "CAR-69000",
             "Carrefour Lyon Part Dieu",
             "maker",
@@ -42,6 +54,11 @@ module.exports = {
             "4.857217",
             web3
         );
+
+        const actorBAR1Model = ActorModel.create({
+            actorName: "CAR2",
+            actorWalletAddress: walletAddressCAR2,
+        });
 
         const transaction1 = await Actor.createTransaction(
             [

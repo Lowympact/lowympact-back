@@ -6,7 +6,7 @@ const ActorSchema = new mongoose.Schema({
         required: [true, "Please add an actor name"],
         unique: true,
     },
-    actorBCAddress: {
+    actorWalletAddress: {
         type: String,
         unique: true,
     },

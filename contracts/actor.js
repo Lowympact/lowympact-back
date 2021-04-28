@@ -19,9 +19,9 @@ module.exports = {
         var newWalletAccount = await web3.eth.personal.newAccount("password");
         web3.eth.personal.unlockAccount(newWalletAccount, "password", 600);
         // Need some ether from a Ganache created account
-        const amount = web3.utils.toWei("20", "ether");
+        const amount = web3.utils.toWei("1", "ether");
         web3.eth.sendTransaction({
-            from: accounts[0],
+            from: accounts[2],
             to: newWalletAccount,
             value: amount,
         });
@@ -37,7 +37,9 @@ module.exports = {
             }
         ); //TODO : not deployed ...
 
-        return newActor.address;
+        console.log(newActor.address);
+        // TODO : resolve the problem with JS Object
+        return { newWalletAccount: newWalletAccount, smartContractActorAddress: newActor.address };
     },
 
     // Create a transaction
