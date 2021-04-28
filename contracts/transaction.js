@@ -19,7 +19,7 @@ module.exports = {
         // Backtrack on the product chain
         var result = await getTransactionInformation(bcProductAddress);
 
-        return JSON.stringify(result);
+        return result;
     },
 
     // Accept an incoming transaction
@@ -28,7 +28,7 @@ module.exports = {
 };
 
 getTransactionInformation = async (transactionAddress) => {
-    const result = [];
+    var result = [];
 
     var jsonTransaction = {};
 
@@ -67,12 +67,10 @@ getTransactionInformation = async (transactionAddress) => {
 
     result.push(jsonTransaction);
 
-    console.log(jsonTransaction);
-
     for (let i = 0; i < jsonTransaction.productsInput.length; i++) {
         let address = jsonTransaction.productsInput[i].addressTransaction;
         if (address !== "0x0000000000000000000000000000000000000000") {
-            result.concat(await getTransactionInformation(address));
+            result = result.concat(await getTransactionInformation(address));
         }
     }
 
