@@ -2,6 +2,8 @@ const Product = require("../models/product");
 const { reverseGeocoder } = require("../util/geocoder");
 const Transaction = require("../contracts/transaction");
 
+const openGeocoder = require("node-open-geocoder");
+
 /*  GET */
 
 exports.getProduct = async (req, res, next) => {
@@ -17,11 +19,24 @@ exports.getProduct = async (req, res, next) => {
                 });
             });
             */
-            let geocoderTest = await reverseGeocoder(45.78264, 4.878073);
-            res.status(200).json({
-                success: true,
-                geocoder: geocoderTest,
-            });
+            //var geocoderTest = await reverseGeocoder(45.78264, 4.878073);
+            var lat = 45.78264;
+            var long = 4.878073;
+            openGeocoder()
+                .reverse(long, lat)
+                .end((err, geocoderRes) => {
+                    if (!err) {
+                        res.status(200).json({
+                            success: true,
+                            message: geocoderRes,
+                        });
+                    } else {
+                        res.status(200).json({
+                            success: false,
+                            message: "reverse geocoder error",
+                        });
+                    }
+                });
         } else {
             console.log("BARCODE - Impact");
             res.status(501).json({
