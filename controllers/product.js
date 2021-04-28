@@ -1,5 +1,4 @@
 const Product = require("../models/product");
-const { reverseGeocoder } = require("../util/geocoder");
 const Transaction = require("../contracts/transaction");
 
 const openGeocoder = require("node-open-geocoder");
@@ -19,7 +18,6 @@ exports.getProduct = async (req, res, next) => {
                 });
             });
             */
-            //var geocoderTest = await reverseGeocoder(45.78264, 4.878073);
             var lat = 45.78264;
             var long = 4.878073;
             openGeocoder()
