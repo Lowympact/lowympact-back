@@ -22,10 +22,13 @@ const PORT = process.env.port || 8080;
 dotenv.config({ path: ".env" });
 
 // Connect to the Blockchain
-connectBC();
+const web3 = connectBC();
 
 // Connect to MongoDB
 connectDB();
+
+// Launch simulation
+simulation.main(web3);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
