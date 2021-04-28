@@ -10,11 +10,10 @@ const Actor_artifact = require("./builds/transaction.json");
 var Actor_contract = contract(Transaction_artifact);
 
 module.exports = {
-    // TODO :
+    //? Scénario :
     // - Créer 3 acteurs
     // - Créer 2 transactions
     // - Retrouver l'origine du produit à partir de son id donné
-    // Cf. https://github.com/arvindkalra/express-box/blob/master/server.js
 
     main: async function (web3) {
         const BAR1 = await Actor.createActor(
@@ -60,7 +59,7 @@ module.exports = {
             CAR1,
             CAR2, // string: Buyer eth address
             "transaction1", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Type de transport
+            Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Transport type
             web3
         );
 
@@ -80,7 +79,7 @@ module.exports = {
             CAR2,
             BAR1, // string: Buyer eth address
             "transaction2", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Type de transport
+            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
             web3
         );
 
