@@ -49,13 +49,6 @@ module.exports = {
         // const buyer = await Actor.at(buyerAddress);
         const accounts = await web3.eth.getAccounts();
 
-        console.log(productsInput);
-        console.log(productsOutput);
-        console.log(buyerAddress);
-        console.log(idTransaction);
-        console.log(transport);
-        console.log(accounts);
-
         var ans = await seller.createTransaction(
             productsInput,
             productsOutput,
@@ -66,7 +59,7 @@ module.exports = {
         );
 
         console.log("transaction created : " + JSON.stringify(ans.logs[0].args._address, null, 4));
-
+ 
         return ans.logs[0].args._address;
     },
 };
