@@ -18,7 +18,7 @@ module.exports = {
     // - Retrouver l'origine du produit à partir de son id donné
 
     main: async function (web3) {
-        const { walletAddressBAR1, BAR1 } = await Actor.createActor(
+        const BAR1 = await Actor.createActor(
             "BAR-85025 ",
             "Barilla Protenza",
             "producer",
@@ -29,10 +29,10 @@ module.exports = {
 
         const actorBAR1Model = ActorModel.create({
             actorName: "BAR1",
-            actorWalletAddress: walletAddressBAR1,
+            actorWalletAddress: BAR1.newWalletAccount,
         });
 
-        const { walletAddressCAR1, CAR1 } = await Actor.createActor(
+        const CAR1 = await Actor.createActor(
             "CAR-69100",
             "Carrefour Villeurbanne",
             "maker",
@@ -41,12 +41,12 @@ module.exports = {
             web3
         );
 
-        const actorBAR1Model = ActorModel.create({
+        const actorCAR1Model = ActorModel.create({
             actorName: "CAR1",
-            actorWalletAddress: walletAddressCAR1,
+            actorWalletAddress: CAR1.newWalletAccount,
         });
 
-        const { walletAddressCAR2, CAR2 } = await Actor.createActor(
+        const CAR2 = await Actor.createActor(
             "CAR-69000",
             "Carrefour Lyon Part Dieu",
             "maker",
@@ -55,9 +55,9 @@ module.exports = {
             web3
         );
 
-        const actorBAR1Model = ActorModel.create({
+        const actorCAR2Model = ActorModel.create({
             actorName: "CAR2",
-            actorWalletAddress: walletAddressCAR2,
+            actorWalletAddress: CAR2.newWalletAccount,
         });
 
         const transaction1 = await Actor.createTransaction(
@@ -73,8 +73,8 @@ module.exports = {
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
-            CAR1,
-            CAR2, // string: Buyer eth address
+            CAR1.smartContractActorAddress,
+            CAR2.smartContractActorAddress, // string: Buyer eth address
             "transaction1", // string: idTransaction,
             Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Transport type
             web3
@@ -93,8 +93,8 @@ module.exports = {
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
-            CAR2,
-            BAR1, // string: Buyer eth address
+            CAR2.smartContractActorAddress,
+            BAR1.smartContractActorAddress, // string: Buyer eth address
             "transaction2", // string: idTransaction,
             Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
             web3
