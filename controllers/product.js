@@ -2,6 +2,7 @@ const Product = require("../models/product");
 const Transaction = require("../contracts/transaction");
 
 const openGeocoder = require("node-open-geocoder");
+const { web3 } = require("../server");
 
 /*  GET */
 
@@ -10,6 +11,15 @@ exports.getProduct = async (req, res, next) => {
         //const user = await User.findById(req.params.id);
         if (req.query.bcProductId) {
             console.log("QRCODE - Traçabilité");
+
+            let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId, web3);
+
+            res.status(200).json({
+                success: true,
+                data: {
+                    traceability: traceabilityData,
+                },
+            });
             /*
             Transaction.getProductHistory(function (answer) {
                 res.status(200).json({
@@ -18,6 +28,7 @@ exports.getProduct = async (req, res, next) => {
                 });
             });
             */
+            /*
             var lat = 45.78264;
             var long = 4.878073;
             openGeocoder()
@@ -35,6 +46,7 @@ exports.getProduct = async (req, res, next) => {
                         });
                     }
                 });
+            */
         } else {
             console.log("BARCODE - Impact");
             res.status(501).json({
