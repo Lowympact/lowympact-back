@@ -8,14 +8,23 @@ module.exports = {
     // - Retrouver l'origine du produit à partir de son id donné
     // Cf. https://github.com/arvindkalra/express-box/blob/master/server.js
 
-    main: function () {
-        const addressActor1 = await Actor.createActor(
-            "CAR",
-            "Carrefour",
+    main: function (web3) {
+        const CAR1 = Actor.createActor(
+            "CAR-69100",
+            "Carrefour Villeurbanne",
             "maker",
-            latitude,
-            longitude,
-            (owner)
+            "45.76478",
+            "4.88037",
+            web3
         );
+        /*
+        const CAR2 = await Actor.createActor(
+            "CAR-69100",
+            "Carrefour Lyon Part Dieu",
+            "maker",
+            "45.761467",
+            "4.857217",
+            (owner)
+        );*/
     },
 };
