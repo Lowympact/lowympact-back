@@ -25,9 +25,7 @@ module.exports = {
             }
         );
 
-        //a(accounts);
-
-        console.log("actor : " + newActor.address);
+        console.log("actor created : " + newActor.address);
 
         return newActor.address;
     },
@@ -36,8 +34,8 @@ module.exports = {
     createTransaction: async function (
         productsInput, // Transaction.Product[] memory _productsInput,
         productsOutput, // Transaction.Product[] memory _productsOutput,
-        sellerAdress, // string: Seller eth address
-        buyerAdress, // string: Actor eth address,
+        sellerAddress, // string: Seller eth address
+        buyerAddress, // string: Actor eth address,
         idTransaction, // string: idTransaction,
         transport, // Transaction.TransportType: Type de transport
         web3 //Web3 Provider
@@ -47,32 +45,28 @@ module.exports = {
 
         // TODO : Create the instance and return the address so as to store it in MondoDB
 
-        const seller = await Actor.at(sellerAdress);
-        const buyer = await Actor.at(buyerAdress);
+        const seller = await Actor.at(sellerAddress);
+        // const buyer = await Actor.at(buyerAddress);
         const accounts = await web3.eth.getAccounts();
 
-        let ans = await seller.createTransaction(
+        console.log(productsInput);
+        console.log(productsOutput);
+        console.log(buyerAddress);
+        console.log(idTransaction);
+        console.log(transport);
+        console.log(accounts);
+
+        var ans = await seller.createTransaction(
             productsInput,
             productsOutput,
-            buyer,
+            buyerAddress,
             idTransaction,
             transport,
             { from: accounts[5] } // TODO: Use the address of the seller
         );
 
-        console.log("Nouvelle transaction crée :");
-        console.log(ans);
+        console.log("transaction created : " + JSON.stringify(ans.logs[0].args._address, null, 4));
 
-        return ans;
+        return ans.logs[0].args._address;
     },
-};
-
-a = function (accounts) {
-    return new Promise((resolve) => {
-        let a = 0;
-        while (1) {
-            Actor.new("a", "b", "c", "d", "e", { from: accounts[a] });
-            a = (a + 1) % 10;
-        }
-    });
 };
