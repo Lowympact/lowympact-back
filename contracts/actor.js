@@ -25,6 +25,10 @@ module.exports = {
             }
         );
 
+        //a(accounts);
+
+        console.log("actor : " + newActor.address);
+
         return newActor.address;
     },
 
@@ -32,19 +36,20 @@ module.exports = {
     createTransaction: async function (
         productsInput, // Transaction.Product[] memory _productsInput,
         productsOutput, // Transaction.Product[] memory _productsOutput,
-        buyerAdress, // string: Actor eth address,
         sellerAdress, // string: Seller eth address
+        buyerAdress, // string: Actor eth address,
         idTransaction, // string: idTransaction,
         transport, // Transaction.TransportType: Type de transport
-        callback
+        web3 //Web3 Provider
     ) {
         // Bootstrap the Actor abstraction for use
         Actor.setProvider(web3.currentProvider);
 
         // TODO : Create the instance and return the address so as to store it in MondoDB
 
-        const buyer = await Actor.at(buyerAdress);
         const seller = await Actor.at(sellerAdress);
+        const buyer = await Actor.at(buyerAdress);
+        const accounts = await web3.eth.getAccounts();
 
         let ans = await seller.createTransaction(
             productsInput,
@@ -52,7 +57,7 @@ module.exports = {
             buyer,
             idTransaction,
             transport,
-            { from: accounts[0] } // TODO: Use the address of the seller
+            { from: accounts[5] } // TODO: Use the address of the seller
         );
 
         console.log("Nouvelle transaction crée :");
@@ -60,4 +65,14 @@ module.exports = {
 
         return ans;
     },
+};
+
+a = function (accounts) {
+    return new Promise((resolve) => {
+        let a = 0;
+        while (1) {
+            Actor.new("a", "b", "c", "d", "e", { from: accounts[a] });
+            a = (a + 1) % 10;
+        }
+    });
 };
