@@ -42,8 +42,8 @@ router.use(checkApiKey);
  *        required: true
  *      - name: bcProductId
  *        in: query
- *        description: Product Blockchain ID
- *        type: integer
+ *        description: Product Blockchain Address where this product is an output
+ *        type: string
  *        required: false
  *     responses:
  *       200:
