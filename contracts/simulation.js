@@ -17,6 +17,15 @@ module.exports = {
     // Cf. https://github.com/arvindkalra/express-box/blob/master/server.js
 
     main: async function (web3) {
+        const BAR1 = await Actor.createActor(
+            "BAR-85025 ",
+            "Barilla Protenza",
+            "producer",
+            "41.0728191",
+            "15.7028457",
+            web3
+        );
+
         const CAR1 = await Actor.createActor(
             "CAR-69100",
             "Carrefour Villeurbanne",
@@ -35,33 +44,46 @@ module.exports = {
             web3
         );
 
-        Actor.createTransaction(
+        const transaction1 = await Actor.createTransaction(
             [
-                Transaction.Product({
-                    productInputId: "noisette1",
-                    addressTransaction: "",
-                }),
-                Transaction.Product({
-                    productInputId: "noisette2",
-                    addressTransaction: "",
-                }),
+                {
+                    productId: "1",
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
             ],
             [
-                Transaction.Product({
-                    productInputId: "nutella1",
-                    addressTransaction: "",
-                }),
-                Transaction.Product({
-                    productInputId: "nutella2",
-                    addressTransaction: "",
-                }),
+                {
+                    productId: "2",
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
             ],
             CAR1,
             CAR2, // string: Buyer eth address
-            "12345687", // string: idTransaction,
+            "transaction1", // string: idTransaction,
             Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Type de transport
-            web3,
-            { from: accounts[5] }
+            web3
         );
+
+        const transaction2 = await Actor.createTransaction(
+            [
+                {
+                    productId: "2",
+                    addressTransaction: transaction1,
+                },
+            ],
+            [
+                {
+                    productId: "3",
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
+            ],
+            CAR2,
+            BAR1, // string: Buyer eth address
+            "transaction2", // string: idTransaction,
+            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Type de transport
+            web3
+        );
+
+        const productHistory = await Transaction.getProductHistory(transaction2, web3);
     },
 };
