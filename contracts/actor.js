@@ -10,6 +10,7 @@ var Actor = contract(actor_artifact);
 module.exports = {
     // Create a new actor on the bc
     createActor: async function (id, name, actorType, latitude, longitude, web3) {
+        // Bootstrap the Actor abstraction for use
         Actor.setProvider(web3.currentProvider);
 
         const accounts = await web3.eth.getAccounts();
@@ -21,7 +22,7 @@ module.exports = {
             latitude, // string:
             longitude, // string:
             {
-                from: accounts[5], // specify from account
+                from: accounts[5], // specify from account // TODO : Use the wallet address of the actor
             }
         );
 
@@ -35,18 +36,15 @@ module.exports = {
         productsInput, // Transaction.Product[] memory _productsInput,
         productsOutput, // Transaction.Product[] memory _productsOutput,
         sellerAddress, // string: Seller eth address
-        buyerAddress, // string: Actor eth address,
+        buyerAddress, // string: Buyer eth address,
         idTransaction, // string: idTransaction,
-        transport, // Transaction.TransportType: Type de transport
-        web3 //Web3 Provider
+        transport, // Transaction.TransportType: Transport type
+        web3 // Web3 Provider
     ) {
         // Bootstrap the Actor abstraction for use
         Actor.setProvider(web3.currentProvider);
 
-        // TODO : Create the instance and return the address so as to store it in MondoDB
-
         const seller = await Actor.at(sellerAddress);
-        // const buyer = await Actor.at(buyerAddress);
         const accounts = await web3.eth.getAccounts();
 
         var ans = await seller.createTransaction(
@@ -55,11 +53,11 @@ module.exports = {
             buyerAddress,
             idTransaction,
             transport,
-            { from: accounts[5] } // TODO: Use the address of the seller
+            { from: accounts[5] } // TODO : Use the wallet address of the seller
         );
 
         console.log("transaction created : " + JSON.stringify(ans.logs[0].args._address, null, 4));
- 
+
         return ans.logs[0].args._address;
     },
 };
