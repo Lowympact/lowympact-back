@@ -23,6 +23,7 @@ dotenv.config({ path: ".env" });
 
 // Connect to the Blockchain
 const web3 = connectBC();
+module.exports.web3 = web3;
 
 // Connect to MongoDB
 connectDB();
