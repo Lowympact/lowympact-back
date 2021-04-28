@@ -12,6 +12,7 @@
     "express-mongo-sanitize": "^2.0.2",
     "helmet": "^4.5.0",
     "mongoose": "^5.12.4",
+    "node-open-geocoder": "^4.0.1",
     "swagger-jsdoc": "6.0.0",
     "swagger-ui-express": "^4.1.6",
     "xss-clean": "^0.1.1"
