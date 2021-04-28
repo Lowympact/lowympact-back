@@ -15,6 +15,17 @@ module.exports = {
 
         const accounts = await web3.eth.getAccounts();
 
+        // Create a wallet account for the client (needs to be stored in MongoDB)
+        var newWalletAccount = await web3.eth.personal.newAccount("password");
+        web3.eth.personal.unlockAccount(newWalletAccount, "password", 600);
+        // Need some ether from a Ganache created account
+        const amount = web3.utils.toWei("20", "ether");
+        web3.eth.sendTransaction({
+            from: accounts[0],
+            to: newWalletAccount,
+            value: amount,
+        });
+
         newActor = await Actor.new(
             id, // string:
             name, // string:
@@ -22,11 +33,9 @@ module.exports = {
             latitude, // string:
             longitude, // string:
             {
-                from: accounts[5], // specify from account // TODO : Use the wallet address of the actor
+                from: newWalletAccount, // specify from account
             }
-        );
-
-        console.log("actor created : " + newActor.address);
+        ); //TODO : not deployed ...
 
         return newActor.address;
     },
@@ -55,8 +64,6 @@ module.exports = {
             transport,
             { from: accounts[5] } // TODO : Use the wallet address of the seller
         );
-
-        console.log("transaction created : " + JSON.stringify(ans.logs[0].args._address, null, 4));
 
         return ans.logs[0].args._address;
     },

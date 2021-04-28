@@ -85,6 +85,6 @@ module.exports = {
 
         const productHistory = await Transaction.getProductHistory(transaction2, web3);
 
-        console.log(productHistory);
+        //console.log(productHistory);
     },
 };
