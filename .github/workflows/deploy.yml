@@ -29,4 +29,5 @@ jobs:
         KEY: ${{ secrets.SSHKEY }}
         script: |
           cd insa/smart-api
+          npm install
           npm run prodrestart
