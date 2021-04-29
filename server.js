@@ -42,6 +42,17 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 // const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 
+app.use((req, res, next) => {
+	res.setHeader(
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token'
+		);
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+
+	next();
+});
+
 // CORS
 const allowedOrigins = [
 	"http://localhost:3000",
