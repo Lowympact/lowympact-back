@@ -109,8 +109,14 @@ module.exports = {
             BAR1.newWalletAccount
         );
 
+        //Front export
+        console.log("Export mockTransactionFront");
+        module.exports.mockTransactionFront = transaction2;
+
         const productHistory = await Transaction.getProductHistory(transaction2);
 
         //console.log(productHistory);
     },
+
+    mockTransactionFront: null,
 };

@@ -3,6 +3,8 @@ const Transaction = require("../contracts/transaction");
 
 const openGeocoder = require("node-open-geocoder");
 
+const simulation = require("../contracts/simulation");
+
 /*  GET */
 
 exports.getProduct = async (req, res, next) => {
@@ -10,6 +12,11 @@ exports.getProduct = async (req, res, next) => {
         //const user = await User.findById(req.params.id);
         if (req.query.bcProductId) {
             console.log("QRCODE - Traçabilité");
+
+            // Mock Front
+            if (req.query.bcProductId == "idbc") {
+                req.query.bcProductId = simulation.mockTransactionFront;
+            }
 
             // Blockchain's Traceability
             let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
@@ -75,7 +82,7 @@ exports.getProduct = async (req, res, next) => {
 // Private functions
 // kg CO2 per km or miles
 function computeTransportCO2Impact(traceabilityData) {
-    let impactGlobal;
+    let impactGlobal = 0;
     traceabilityData.forEach((element) => {
         let impactCoeff;
         switch (element.transport) {
