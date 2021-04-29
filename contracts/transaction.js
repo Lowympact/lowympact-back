@@ -34,12 +34,57 @@ module.exports = {
 };
 
 getTransactionInformation = async (transactionAddress) => {
-    var result = [];
-
-    var jsonTransaction = {};
-
+    // Get all informations
     var transaction = await Transaction.at(transactionAddress);
 
+    var transactionInformations = await transaction.getTransactionInformations();
+
+    var buyer = await Actor.at(transactionInformations._buyerAddress);
+    var seller = await Actor.at(transactionInformations._sellerAddress);
+
+    var buyerInformations = await buyer.getActorInformations();
+    var sellerInformations = await seller.getActorInformations();
+
+    // Create result
+    var result = [];
+    var jsonTransaction = {
+        id: transactionInformations._id,
+        buyer: {
+            id: buyerInformations._id,
+            name: buyerInformations._name,
+            type: buyerInformations._actorType,
+            localisation: {
+                longitude: buyerInformations._longitude,
+                latitude: buyerInformations._latitude,
+            },
+        },
+        seller: {
+            id: sellerInformations._id,
+            name: sellerInformations._name,
+            type: sellerInformations._actorType,
+            localisation: {
+                longitude: sellerInformations._longitude,
+                latitude: sellerInformations._latitude,
+            },
+            productsInput: transactionInformations._productsInput,
+            productsOutput: transactionInformations._productsOutput,
+            transport: getTransportType(transactionInformations._transport),
+            date: transactionInformations._date,
+            isFinished: transactionInformations._isFinished,
+            isAccepted: transactionInformations._isAccepted,
+        },
+    };
+
+    result.push(jsonTransaction);
+
+    for (let i = 0; i < jsonTransaction.productsInput.length; i++) {
+        let address = jsonTransaction.productsInput[i].addressTransaction;
+        if (address !== "0x0000000000000000000000000000000000000000") {
+            result = result.concat(await getTransactionInformation(address));
+        }
+    }
+
+    /*
     var buyer = await Actor.at(await transaction.buyer());
 
     jsonTransaction["id"] = await transaction.idTransaction();
@@ -79,6 +124,7 @@ getTransactionInformation = async (transactionAddress) => {
             result = result.concat(await getTransactionInformation(address));
         }
     }
+    */
 
     return result;
 };
