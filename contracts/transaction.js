@@ -66,13 +66,13 @@ getTransactionInformation = async (transactionAddress) => {
                 longitude: sellerInformations._longitude,
                 latitude: sellerInformations._latitude,
             },
-            productsInput: transactionInformations._productsInput,
-            productsOutput: transactionInformations._productsOutput,
-            transport: getTransportType(transactionInformations._transport),
-            date: transactionInformations._date,
-            isFinished: transactionInformations._isFinished,
-            isAccepted: transactionInformations._isAccepted,
         },
+        productsInput: transactionInformations._productsInput,
+        productsOutput: transactionInformations._productsOutput,
+        transport: getTransportType(transactionInformations._transport),
+        date: transactionInformations._date,
+        isFinished: transactionInformations._isFinished,
+        isAccepted: transactionInformations._isAccepted,
     };
 
     result.push(jsonTransaction);
