@@ -4,6 +4,8 @@ const Transaction = require("../contracts/transaction");
 const openGeocoder = require("node-open-geocoder");
 const { web3 } = require("../server");
 
+const { mockTransactionFront } = require("../contracts/simulation");
+
 /*  GET */
 
 exports.getProduct = async (req, res, next) => {
@@ -11,6 +13,12 @@ exports.getProduct = async (req, res, next) => {
         //const user = await User.findById(req.params.id);
         if (req.query.bcProductId) {
             console.log("QRCODE - Traçabilité");
+
+            // Mock Front
+            if (req.query.bcProductId == "idbc") {
+                console.log("Mock FRONT : " + mockTransactionFront);
+                req.query.bcProductId = mockTransactionFront;
+            }
 
             let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId, web3);
 

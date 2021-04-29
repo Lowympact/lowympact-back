@@ -11,6 +11,8 @@ var Actor_contract = contract(Transaction_artifact);
 
 const ActorModel = require("../models/actor");
 
+var mockTransactionFront;
+
 module.exports = {
     //? Scénario :
     // - Créer 3 acteurs
@@ -99,6 +101,10 @@ module.exports = {
             Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
             web3
         );
+
+        //Front export
+        mockTransactionFront = transaction2;
+        module.exports = mockTransactionFront;
 
         const productHistory = await Transaction.getProductHistory(transaction2, web3);
 
