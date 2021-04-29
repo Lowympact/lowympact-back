@@ -41,7 +41,7 @@ module.exports = {
             actorId: "BAR1",
             actorName: "BAR1",
             actorWalletAddress: BAR1.newWalletAccount,
-            actorPassword: "password",
+            actorPasswordHashed: "password",
         });
 
         const CAR1 = await Actor.createActor(
@@ -56,7 +56,7 @@ module.exports = {
             actorId: "CAR1",
             actorName: "CAR1",
             actorWalletAddress: CAR1.newWalletAccount,
-            actorPassword: "password",
+            actorPasswordHashed: "password",
         });
 
         const CAR2 = await Actor.createActor(
@@ -71,7 +71,7 @@ module.exports = {
             actorId: "CAR2",
             actorName: "CAR2",
             actorWalletAddress: CAR2.newWalletAccount,
-            actorPassword: "password",
+            actorPasswordHashed: "password",
         });
 
         //dechiffer wallet

@@ -15,7 +15,7 @@ const ActorSchema = new mongoose.Schema({
         type: String,
         unique: true,
     },
-    actorPassword: {
+    actorPasswordHashed: {
         type: String,
         required: [true, "Please provide a password"],
     },

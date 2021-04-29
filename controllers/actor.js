@@ -29,13 +29,12 @@ exports.getActor = async (req, res, next) => {
 /*  POST */
 
 // TODO : find the best solution to add web3
-// TODO : chiffrer newWalletAccount? et password
 exports.createActor = async (req, res, next) => {
     try {
         // Create the new wallet account
-        var newWalletAccount = await web3.eth.personal.newAccount(req.body.password);
-        web3.eth.personal.unlockAccount(newWalletAccount, req.body.password, 600);
-        // Need some ether from a Ganache created account (POC)
+        var newWalletAccount = await web3.eth.personal.newAccount(req.body.actorPassword);
+        web3.eth.personal.unlockAccount(newWalletAccount, req.body.actorPassword, 600);
+        // POC : Need some ether from a Ganache created account
         const accounts = await web3.eth.getAccounts();
         const amount = web3.utils.toWei("1", "ether");
         web3.eth.sendTransaction({
