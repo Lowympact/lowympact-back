@@ -3,7 +3,7 @@ const Transaction = require("../contracts/transaction");
 
 const openGeocoder = require("node-open-geocoder");
 
-const { mockTransactionFront } = require("../contracts/simulation");
+const simulation = require("../contracts/simulation");
 
 /*  GET */
 
@@ -15,8 +15,7 @@ exports.getProduct = async (req, res, next) => {
 
             // Mock Front
             if (req.query.bcProductId == "idbc") {
-                console.log("Mock FRONT : " + mockTransactionFront);
-                req.query.bcProductId = mockTransactionFront;
+                req.query.bcProductId = simulation.mockTransactionFront;
             }
 
             let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);

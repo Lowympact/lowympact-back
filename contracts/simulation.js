@@ -19,8 +19,6 @@ resetSimulation = () => {
     });
 };
 
-var mockTransactionFront;
-
 module.exports = {
     //? Scénario :
     // - Créer 3 acteurs
@@ -112,11 +110,13 @@ module.exports = {
         );
 
         //Front export
-        mockTransactionFront = transaction2;
-        module.exports = mockTransactionFront;
+        console.log("Export mockTransactionFront");
+        module.exports.mockTransactionFront = transaction2;
 
         const productHistory = await Transaction.getProductHistory(transaction2);
 
         //console.log(productHistory);
     },
+
+    mockTransactionFront: null,
 };
