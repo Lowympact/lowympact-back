@@ -7,14 +7,20 @@ const actor_artifact = require("./builds/actor.json");
 var Transaction = contract(transaction_artifact);
 var Actor = contract(actor_artifact);
 
+var web3;
+
 // Following are functions which permit to have a JS abstract of the Smart Contract
 // and to interact with the ethereum blockchain
 // (i.e. create a new instance, deploy it, call its function, etc.)
 module.exports = {
-    getProductHistory: async function (bcProductAddress, web3) {
-        // Bootstrap the Transaction abstraction for use
+    init: function (newWeb3) {
+        web3 = newWeb3;
         Transaction.setProvider(web3.currentProvider);
         Actor.setProvider(web3.currentProvider);
+    },
+
+    getProductHistory: async function (bcProductAddress) {
+        // Bootstrap the Transaction abstraction for use
 
         // Backtrack on the product chain
         var result = await getTransactionInformation(bcProductAddress);
