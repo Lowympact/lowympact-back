@@ -10,6 +10,7 @@ const simulation = require("../contracts/simulation");
 exports.getProduct = async (req, res, next) => {
     try {
         //const user = await User.findById(req.params.id);
+        console.log(req.query);
         if (req.query.bcProductId) {
             console.log("QRCODE - Traçabilité");
 
@@ -86,51 +87,41 @@ function computeTransportCO2Impact(traceabilityData) {
     traceabilityData.forEach((element) => {
         let impactCoeff;
         switch (element.transport) {
-            case Transaction.enums.TransportType.Plane:
+            case "Plane":
                 impactCoeff = 0.152;
                 break;
-            case Transaction.enums.TransportType.Train:
+            case "Train":
                 impactCoeff = 0.065;
                 break;
-            case Transaction.enums.TransportType.Boat:
+            case "Boat":
                 impactCoeff = 0.7;
                 break;
-            case Transaction.enums.TransportType.Truck:
+            case "Truck":
                 impactCoeff = 0.1;
                 break;
-            case Transaction.enums.TransportType.Charette:
+            case "Charette":
                 impactCoeff = 0.001;
                 break;
             default:
                 break;
         }
-        lat1 = float(element.seller.localisation.latitude);
-        long1 = float(element.seller.localisation.longitude);
-        lat2 = float(element.buyer.localisation.latitude);
-        long2 = float(element.buyer.localisation.longitude);
-        dist = getDistanceFromLatLonInKm(lat1, long1, lat1, long2, "km");
-        impactGlobal += impact * dist;
+        lat1 = parseFloat(element.seller.localisation.latitude);
+        long1 = parseFloat(element.seller.localisation.longitude);
+        lat2 = parseFloat(element.buyer.localisation.latitude);
+        long2 = parseFloat(element.buyer.localisation.longitude);
+        dist = getDistanceFromLatLonInKm(lat1, long1, lat1, long2);
+        impactGlobal += impactCoeff * dist;
     });
     return impactGlobal;
 }
 
-function getDistanceFromLatLonInKm(latitude1, longitude1, latitude2, longitude2, units) {
-    var earthRadius = 6371; // Radius of the earth in km
-    var dLat = deg2rad(latitude2 - latitude1); // deg2rad below
-    var dLon = deg2rad(longitude2 - longitude1);
+function getDistanceFromLatLonInKm(latitude1, longitude1, latitude2, longitude2) {
+    var p = 0.017453292519943295; //This is  Math.PI / 180
+    var c = Math.cos;
     var a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(latitude1)) *
-            Math.cos(deg2rad(latitude2)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    var d = earthRadius * c;
-    var miles = d / 1.609344;
-
-    if (units == "km") {
-        return d;
-    } else {
-        return miles;
-    }
+        0.5 -
+        c((latitude2 - latitude1) * p) / 2 +
+        (c(latitude1 * p) * c(latitude2 * p) * (1 - c((longitude2 - longitude1) * p))) / 2;
+    var R = 6371; //  Earth distance in km so it will return the distance in km
+    return 2 * R * Math.asin(Math.sqrt(a));
 }
