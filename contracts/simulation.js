@@ -21,9 +21,9 @@ resetSimulation = () => {
 
 module.exports = {
     //? Scénario :
-    // - Créer 3 acteurs
-    // - Créer 2 transactions
-    // - Retrouver l'origine du produit à partir de son id donné
+    // - Create 3 actors
+    // - Create 2 transactions
+    // - Given a product id, backtrack all the linked transactions
 
     main: async function () {
         // At the beginning of the simulation, reset all MongoDB data
@@ -38,8 +38,10 @@ module.exports = {
         );
 
         const actorBAR1Model = ActorModel.create({
+            actorId: "BAR1",
             actorName: "BAR1",
             actorWalletAddress: BAR1.newWalletAccount,
+            actorPassword: "password",
         });
 
         const CAR1 = await Actor.createActor(
@@ -51,8 +53,10 @@ module.exports = {
         );
 
         const actorCAR1Model = ActorModel.create({
+            actorId: "CAR1",
             actorName: "CAR1",
             actorWalletAddress: CAR1.newWalletAccount,
+            actorPassword: "password",
         });
 
         const CAR2 = await Actor.createActor(
@@ -64,8 +68,10 @@ module.exports = {
         );
 
         const actorCAR2Model = ActorModel.create({
+            actorId: "CAR2",
             actorName: "CAR2",
             actorWalletAddress: CAR2.newWalletAccount,
+            actorPassword: "password",
         });
 
         //dechiffer wallet

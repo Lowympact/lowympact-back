@@ -16,14 +16,12 @@ module.exports = {
     },
     // Create a new actor on the bc
     createActor: async function (id, name, actorType, latitude, longitude) {
-        // Bootstrap the Actor abstraction for use
-
-        const accounts = await web3.eth.getAccounts();
-
+        //TODO : update these lines when wallet creation will be implemented
         // Create a wallet account for the client (needs to be stored in MongoDB)
         var newWalletAccount = await web3.eth.personal.newAccount("password");
         web3.eth.personal.unlockAccount(newWalletAccount, "password", 600);
         // Need some ether from a Ganache created account
+        const accounts = await web3.eth.getAccounts();
         const amount = web3.utils.toWei("1", "ether");
         web3.eth.sendTransaction({
             from: accounts[2],
@@ -41,8 +39,6 @@ module.exports = {
                 from: newWalletAccount, // specify from account
             }
         );
-
-        // TODO : chiffrer newWalletAccount
 
         return { newWalletAccount: newWalletAccount, smartContractActorAddress: newActor.address };
     },
