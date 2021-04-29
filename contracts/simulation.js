@@ -10,6 +10,14 @@ const Actor_artifact = require("./builds/transaction.json");
 var Actor_contract = contract(Transaction_artifact);
 
 const ActorModel = require("../models/actor");
+const UserModel = require("../models/actor");
+const mongoose = require("mongoose");
+
+resetSimulation = () => {
+    mongoose.connection.collections["actors"].drop((err) => {
+        console.log("Actor collection dropped.");
+    });
+};
 
 var mockTransactionFront;
 
@@ -19,14 +27,16 @@ module.exports = {
     // - Créer 2 transactions
     // - Retrouver l'origine du produit à partir de son id donné
 
-    main: async function (web3) {
+    main: async function () {
+        // At the beginning of the simulation, reset all MongoDB data
+        resetSimulation();
+
         const BAR1 = await Actor.createActor(
             "BAR-85025 ",
             "Barilla Protenza",
             "producer",
             "41.0728191",
-            "15.7028457",
-            web3
+            "15.7028457"
         );
 
         const actorBAR1Model = ActorModel.create({
@@ -39,8 +49,7 @@ module.exports = {
             "Carrefour Villeurbanne",
             "maker",
             "45.76478",
-            "4.88037",
-            web3
+            "4.88037"
         );
 
         const actorCAR1Model = ActorModel.create({
@@ -53,8 +62,7 @@ module.exports = {
             "Carrefour Lyon Part Dieu",
             "maker",
             "45.761467",
-            "4.857217",
-            web3
+            "4.857217"
         );
 
         const actorCAR2Model = ActorModel.create({
@@ -62,6 +70,7 @@ module.exports = {
             actorWalletAddress: CAR2.newWalletAccount,
         });
 
+        //dechiffer wallet
         const transaction1 = await Actor.createTransaction(
             [
                 {
@@ -79,7 +88,7 @@ module.exports = {
             CAR2.smartContractActorAddress, // string: Buyer eth address
             "transaction1", // string: idTransaction,
             Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Transport type
-            web3
+            CAR1.newWalletAccount
         );
 
         const transaction2 = await Actor.createTransaction(
@@ -95,18 +104,18 @@ module.exports = {
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
-            CAR2.smartContractActorAddress,
-            BAR1.smartContractActorAddress, // string: Buyer eth address
+            BAR1.smartContractActorAddress,
+            CAR2.smartContractActorAddress, // string: Buyer eth address
             "transaction2", // string: idTransaction,
             Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
-            web3
+            BAR1.newWalletAccount
         );
 
         //Front export
         mockTransactionFront = transaction2;
         module.exports = mockTransactionFront;
 
-        const productHistory = await Transaction.getProductHistory(transaction2, web3);
+        const productHistory = await Transaction.getProductHistory(transaction2);
 
         //console.log(productHistory);
     },

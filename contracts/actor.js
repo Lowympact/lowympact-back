@@ -1,17 +1,22 @@
-const contract = require("@truffle/contract");
+var web3;
+var Actor;
 
+const contract = require("@truffle/contract");
 const actor_artifact = require("./builds/actor.json");
 
-var Actor = contract(actor_artifact);
+Actor = contract(actor_artifact);
 
 // Following are functions which permit to have a JS abstract of the Smart Contract
 // and to interact with the ethereum blockchain
 // (i.e. create a new instance, deploy it, call its function, etc.)
 module.exports = {
-    // Create a new actor on the bc
-    createActor: async function (id, name, actorType, latitude, longitude, web3) {
-        // Bootstrap the Actor abstraction for use
+    init: function (newWeb3) {
+        web3 = newWeb3;
         Actor.setProvider(web3.currentProvider);
+    },
+    // Create a new actor on the bc
+    createActor: async function (id, name, actorType, latitude, longitude) {
+        // Bootstrap the Actor abstraction for use
 
         const accounts = await web3.eth.getAccounts();
 
@@ -35,10 +40,10 @@ module.exports = {
             {
                 from: newWalletAccount, // specify from account
             }
-        ); //TODO : not deployed ...
+        );
 
-        console.log(newActor.address);
-        // TODO : resolve the problem with JS Object
+        // TODO : chiffrer newWalletAccount
+
         return { newWalletAccount: newWalletAccount, smartContractActorAddress: newActor.address };
     },
 
@@ -50,11 +55,8 @@ module.exports = {
         buyerAddress, // string: Buyer eth address,
         idTransaction, // string: idTransaction,
         transport, // Transaction.TransportType: Transport type
-        web3 // Web3 Provider
+        actorWallet
     ) {
-        // Bootstrap the Actor abstraction for use
-        Actor.setProvider(web3.currentProvider);
-
         const seller = await Actor.at(sellerAddress);
         const accounts = await web3.eth.getAccounts();
 
@@ -64,7 +66,7 @@ module.exports = {
             buyerAddress,
             idTransaction,
             transport,
-            { from: accounts[5] } // TODO : Use the wallet address of the seller
+            { from: actorWallet } // Use the wallet address of the seller
         );
 
         return ans.logs[0].args._address;

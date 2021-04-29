@@ -12,8 +12,10 @@ const swaggerInit = require("./doc/swagger");
 const swaggerUi = require("swagger-ui-express");
 const connectDB = require("./connection/db");
 const connectBC = require("./connection/bc");
-const app = express();
 const simulation = require("./contracts/simulation");
+const Actor = require("./contracts/actor");
+const Transaction = require("./contracts/transaction");
+const app = express();
 
 // Set PORT (default:8080)
 const PORT = process.env.port || 8080;
@@ -23,13 +25,15 @@ dotenv.config({ path: ".env" });
 
 // Connect to the Blockchain
 const web3 = connectBC();
-module.exports.web3 = web3;
+
+Actor.init(web3);
+Transaction.init(web3);
 
 // Connect to MongoDB
 connectDB();
 
 // Launch simulation
-simulation.main(web3);
+simulation.main();
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));

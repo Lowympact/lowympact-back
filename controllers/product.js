@@ -2,7 +2,6 @@ const Product = require("../models/product");
 const Transaction = require("../contracts/transaction");
 
 const openGeocoder = require("node-open-geocoder");
-const { web3 } = require("../server");
 
 const { mockTransactionFront } = require("../contracts/simulation");
 
@@ -20,7 +19,7 @@ exports.getProduct = async (req, res, next) => {
                 req.query.bcProductId = mockTransactionFront;
             }
 
-            let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId, web3);
+            let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
 
             res.status(200).json({
                 success: true,
