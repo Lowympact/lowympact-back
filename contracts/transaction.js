@@ -20,8 +20,6 @@ module.exports = {
     },
 
     getProductHistory: async function (bcProductAddress) {
-        // Bootstrap the Transaction abstraction for use
-
         // Backtrack on the product chain
         var result = await getTransactionInformation(bcProductAddress);
 
@@ -70,7 +68,7 @@ getTransactionInformation = async (transactionAddress) => {
         productsInput: transactionInformations._productsInput,
         productsOutput: transactionInformations._productsOutput,
         transport: getTransportType(transactionInformations._transport),
-        date: transactionInformations._date,
+        date: transactionInformations._date.toNumber(),
         isFinished: transactionInformations._isFinished,
         isAccepted: transactionInformations._isAccepted,
     };
@@ -83,48 +81,6 @@ getTransactionInformation = async (transactionAddress) => {
             result = result.concat(await getTransactionInformation(address));
         }
     }
-
-    /*
-    var buyer = await Actor.at(await transaction.buyer());
-
-    jsonTransaction["id"] = await transaction.idTransaction();
-
-    jsonTransaction["buyer"] = {};
-    jsonTransaction["buyer"]["id"] = await buyer.id();
-    jsonTransaction["buyer"]["name"] = await buyer.name();
-    jsonTransaction["buyer"]["type"] = await buyer.actorType();
-    jsonTransaction["buyer"]["localisation"] = {};
-    jsonTransaction["buyer"]["localisation"]["latitude"] = await buyer.latitude();
-    jsonTransaction["buyer"]["localisation"]["longitude"] = await buyer.longitude();
-
-    var seller = await Actor.at(await transaction.seller());
-
-    jsonTransaction["seller"] = {};
-    jsonTransaction["seller"]["id"] = await seller.id();
-    jsonTransaction["seller"]["name"] = await seller.name();
-    jsonTransaction["seller"]["type"] = await seller.actorType();
-    jsonTransaction["seller"]["localisation"] = {};
-    jsonTransaction["seller"]["localisation"]["latitude"] = await seller.latitude();
-    jsonTransaction["seller"]["localisation"]["longitude"] = await seller.longitude();
-
-    jsonTransaction["productsInput"] = await transaction.getProductsInput();
-    jsonTransaction["productsOutput"] = await transaction.getProductsOutput();
-
-    jsonTransaction["transport"] = getTransportType(await transaction.transport());
-    let dateBN = await transaction.date();
-    jsonTransaction["date"] = dateBN.toNumber();
-    jsonTransaction["isFinished"] = await transaction.isFinished();
-    jsonTransaction["isAccepted"] = await transaction.isAccepted();
-
-    result.push(jsonTransaction);
-
-    for (let i = 0; i < jsonTransaction.productsInput.length; i++) {
-        let address = jsonTransaction.productsInput[i].addressTransaction;
-        if (address !== "0x0000000000000000000000000000000000000000") {
-            result = result.concat(await getTransactionInformation(address));
-        }
-    }
-    */
 
     return result;
 };
