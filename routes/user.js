@@ -78,20 +78,20 @@ router.route("/:userId").get(checkJWT, getUser);
  *         description: Username
  *         schema:
  *           type: string
- *           format: uuid
  *           required: false
  *       - name: email
  *         in: body
  *         description: Email
  *         schema:
- *           type: email
- *           format: uuid
+ *           type: string
+ *           format: email
  *           required: false
  *       - name: currentPassword
  *         in: body
  *         description: Current password
  *         schema:
  *           type: string
+ *           format: password
  *           required: false
  *       - name: newPassword
  *         in: body
