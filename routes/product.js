@@ -6,7 +6,6 @@ const { checkApiKey } = require("../middleware/apiKey");
 
 const { getProduct } = require("../controllers/product");
 
-const Product = require("../models/product");
 const { check } = require("express-validator");
 
 const router = express.Router();

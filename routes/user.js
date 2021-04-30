@@ -7,8 +7,6 @@ const { checkJWT } = require("../middleware/jwtCheck");
 
 const { register, login, getUser, updateDetails, forgotPassword } = require("../controllers/user");
 
-const User = require("../models/user");
-
 const router = express.Router();
 
 // anything below will use the middleware
