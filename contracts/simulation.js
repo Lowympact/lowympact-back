@@ -39,6 +39,7 @@ module.exports = {
 
         const actorBAR1Model = ActorModel.create({
             name: "BAR1",
+            email: "BAR1@gmail.com",
             walletAddress: BAR1.newWalletAccount,
             password: "password",
         });
@@ -53,6 +54,7 @@ module.exports = {
 
         const actorCAR1Model = ActorModel.create({
             name: "CAR1",
+            email: "CAR1@gmail.com",
             walletAddress: CAR1.newWalletAccount,
             password: "password",
         });
@@ -67,6 +69,7 @@ module.exports = {
 
         const actorCAR2Model = ActorModel.create({
             name: "CAR2",
+            email: "CAR2@gmail.com",
             walletAddress: CAR2.newWalletAccount,
             password: "password",
         });

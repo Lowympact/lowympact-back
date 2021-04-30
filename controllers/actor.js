@@ -1,26 +1,48 @@
 const Actor = require("../models/actor");
+const { sendJWT } = require("../util/sendJWT");
 
 /*  GET */
 
-exports.getActors = async (req, res, next) => {
+exports.getActor = async (req, res, next) => {
     try {
-        const actors = await Actor.find();
-        res.status(200).json({
-            success: true,
-            data: actors,
-        });
+        if (req.jwt.id === req.params.idActor) {
+            const actor = await Actor.findById(req.params.idActor);
+            res.status(200).json({
+                success: true,
+                data: actor,
+            });
+        } else {
+            res.status(403).json({
+                success: false,
+                message: "Operation not authorized",
+            });
+        }
     } catch (err) {
         next(err);
     }
 };
 
-exports.getActor = async (req, res, next) => {
+exports.loginActor = async (req, res, next) => {
     try {
-        const actor = await Actor.findById(req.params.id);
-        res.status(200).json({
-            success: true,
-            data: actor,
-        });
+        const { email, password } = req.body;
+        // Validate email & password
+        if (!email || !password) {
+            let err = new Error();
+            err.message = "Please provide an email and a password";
+            return next(err);
+        }
+
+        const actor = await Actor.findOne({ email }).select("+password");
+
+        var data = { idActor: actor.id };
+
+        if (actor && actor.matchPassword(password)) {
+            sendJWT(actor.getSignedJWT(), data, 200, res);
+            return next();
+        }
+        let err = new Error();
+        err.message = "Login failed";
+        return next(err);
     } catch (err) {
         next(err);
     }
@@ -28,7 +50,7 @@ exports.getActor = async (req, res, next) => {
 
 /*  POST */
 
-exports.createActor = async (req, res, next) => {
+exports.registerActor = async (req, res, next) => {
     try {
         // Create the new wallet account
         var newWalletAccount = await web3.eth.personal.newAccount(req.body.password);
@@ -45,7 +67,9 @@ exports.createActor = async (req, res, next) => {
 
         req.body.walletAddress = newWalletAccount;
 
+        // create a user a new actor
         const actor = await Actor.create(req.body);
+
         res.status(201).json({
             success: true,
             data: actor,
@@ -59,14 +83,21 @@ exports.createActor = async (req, res, next) => {
 
 exports.updateActor = async (req, res, next) => {
     try {
-        const actor = await User.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
-        });
-        res.status(201).json({
-            success: true,
-            data: actor,
-        });
+        if (req.jwt.id === req.params.idActor) {
+            const actor = await Actor.findByIdAndUpdate(req.params.idActor, req.body, {
+                new: true,
+                runValidators: true,
+            });
+            res.status(201).json({
+                success: true,
+                data: actor,
+            });
+        } else {
+            res.status(403).json({
+                success: false,
+                message: "Operation not authorized",
+            });
+        }
     } catch (err) {
         next(err);
     }
@@ -76,11 +107,17 @@ exports.updateActor = async (req, res, next) => {
 
 exports.deleteActor = async (req, res, next) => {
     try {
-        await Actor.findByIdAndDelete(req.params.id);
-        res.status(200).json({
-            success: true,
-            data: {},
-        });
+        if (req.jwt.id === req.params.idActor) {
+            await Actor.findByIdAndDelete(req.jwt.id);
+            res.status(200).json({
+                success: true,
+            });
+        } else {
+            res.status(403).json({
+                success: false,
+                message: "Operation not authorized",
+            });
+        }
     } catch (err) {
         next(err);
     }

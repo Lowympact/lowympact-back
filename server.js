@@ -33,7 +33,7 @@ Transaction.init();
 connectDB();
 
 // Launch simulation
-simulation.main();
+//simulation.main();
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
@@ -41,6 +41,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 // Import routes files
 // const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
+const actorRouter = require("./routes/actor");
 
 app.use((req, res, next) => {
     let origin = req.get("origin");
@@ -113,6 +114,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routes
 app.use("/api/v1/products", productRouter);
+app.use("/api/v1/actors", actorRouter);
 // app.use("/api/v1/users", userRouter);
 
 /**
