@@ -33,7 +33,7 @@ Transaction.init();
 connectDB();
 
 // Launch simulation
-simulation.main();
+// simulation.main();
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
