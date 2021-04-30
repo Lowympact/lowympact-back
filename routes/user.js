@@ -215,19 +215,12 @@ router.route("/login").post(login);
  *         schema:
  *           type: string
  *           required: true
- *       - name: password
- *         in: body
- *         description: User password
- *         schema:
- *           type: string
- *           format: password
- *           required: true
  *     responses:
  *       200:
  *         description: OK
  *       404:
  *         description: A user with the specified ID was not found.
  */
-router.route("/forgot-password").get(forgotPassword);
+//router.route("/forgot-password").get(forgotPassword);
 
 module.exports = router;
