@@ -9,8 +9,6 @@ const NodeGeocoderOptions = {
 };
 const geocoder = NodeGeocoder(NodeGeocoderOptions);
 
-const { getName } = require("country-list");
-
 const simulation = require("../contracts/simulation");
 
 /*  GET */
