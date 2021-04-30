@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/user");
 
 // Check if the token is correct
-exports.checkUserToken = async (req, res, next) => {
+exports.checkJWT = async (req, res, next) => {
     try {
         let token;
 
@@ -23,8 +22,8 @@ exports.checkUserToken = async (req, res, next) => {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // We have access to user in any route which uses this middleware
-        req.user = await User.findById(decoded.id);
+        // We have access to jwt in any route which uses this middleware
+        req.jwt = decoded;
 
         next();
     } catch (error) {
