@@ -2,7 +2,7 @@ const express = require("express");
 
 const paginationFiltering = require("../middleware/paginationFiltering");
 const { checkApiKey } = require("../middleware/apiKey");
-const { checkJWT } = require("../middleware/jwtCheck");
+const { checkJWT } = require("../middleware/checkjwt");
 
 const { register, login, getUser, updateDetails, forgotPassword } = require("../controllers/user");
 
