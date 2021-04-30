@@ -43,10 +43,14 @@ const UserSchema = new mongoose.Schema({
 });
 
 //Encrypt password
-UserSchema.pre("save", async function (next) {
-    const salt = await bcrypt.genSalt(10);
-    //middleware has access to the fields
-    this.password = await bcrypt.hash(this.password, salt);
+UserSchema.pre("save", function (next) {
+    user = this;
+    bcrypt.genSalt(10, function (err, salt) {
+        bcrypt.hash(user.password, salt, function (err, hash) {
+            user.password = hash;
+            next();
+        });
+    });
 });
 
 //Sign JWT and return
@@ -60,7 +64,7 @@ UserSchema.methods.getSignedJwtToken = function () {
 
 //Match user entered password to hashed password in DB
 UserSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+    return bcrypt.compareSync(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model("User", UserSchema);

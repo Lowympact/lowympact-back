@@ -5,7 +5,6 @@ const { checkApiKey } = require("../middleware/apiKey");
 
 const { getProduct } = require("../controllers/product");
 
-const Product = require("../models/product");
 const { check } = require("express-validator");
 
 const router = express.Router();
@@ -17,9 +16,11 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/products/{barcode}:
+ * /products/{barcode}:
  *   get:
  *     summary: Gets a product by barcode
+ *     tags:
+ *      - products
  *     description: >
  *        A detailed description of the product identified by barcode.
  *        If the **bcProductId** is passed by parameter, add

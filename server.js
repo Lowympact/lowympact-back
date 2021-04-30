@@ -39,7 +39,7 @@ connectDB();
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 
 // Import routes files
-// const userRouter = require("./routes/user");
+const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 const actorRouter = require("./routes/actor");
 
@@ -115,13 +115,15 @@ app.use(express.static(path.join(__dirname, "public")));
 // Mount routes
 app.use("/api/v1/products", productRouter);
 app.use("/api/v1/actors", actorRouter);
-// app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", userRouter);
 
 /**
  * @swagger
  * /:
  *   get:
  *     summary: Verify API's availability
+ *     tags:
+ *       - availability
  *     description: Check if the API is available at the moment
  *     responses:
  *       200:

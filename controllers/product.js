@@ -1,7 +1,15 @@
 const Product = require("../models/product");
 const Transaction = require("../contracts/transaction");
 
-const openGeocoder = require("node-open-geocoder");
+const NodeGeocoder = require("node-geocoder");
+const NodeGeocoderOptions = {
+    provider: "mapquest",
+    apiKey: process.env.MAPQUESTAPI_KEY,
+    format: "json",
+};
+const geocoder = NodeGeocoder(NodeGeocoderOptions);
+
+const { getName } = require("country-list");
 
 const simulation = require("../contracts/simulation");
 
@@ -20,7 +28,66 @@ exports.getProduct = async (req, res, next) => {
             }
 
             // Blockchain's Traceability
-            let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
+            //let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
+            let traceabilityData = [
+                {
+                    id: "transaction2",
+                    buyer: {
+                        id: "CAR-69000",
+                        name: "Carrefour Lyon Part Dieu",
+                        type: "maker",
+                        localisation: {
+                            longitude: "4.857217",
+                            latitude: "45.761467",
+                        },
+                    },
+                    seller: {
+                        id: "BAR-85025 ",
+                        name: "Barilla Protenza",
+                        type: "producer",
+                        localisation: {
+                            longitude: "15.7028457",
+                            latitude: "41.0728191",
+                        },
+                    },
+                    productsInput: [[Array]],
+                    productsOutput: [[Array]],
+                    transport: "Charette",
+                    date: 1619794500,
+                    isFinished: false,
+                    isAccepted: false,
+                },
+                {
+                    id: "transaction1",
+                    buyer: {
+                        id: "CAR-69000",
+                        name: "Carrefour Lyon Part Dieu",
+                        type: "maker",
+                        localisation: {
+                            longitude: "4.857217",
+                            latitude: "45.761467",
+                        },
+                    },
+                    seller: {
+                        id: "CAR-69100",
+                        name: "Carrefour Villeurbanne",
+                        type: "maker",
+                        localisation: {
+                            longitude: "4.88037",
+                            latitude: "45.76478",
+                        },
+                    },
+                    productsInput: [[Array]],
+                    productsOutput: [[Array]],
+                    transport: "Train",
+                    date: 1619794499,
+                    isFinished: false,
+                    isAccepted: false,
+                },
+            ];
+
+            // Fill the traceability with reverse geocoding
+            await reverseGeocodingOnTraceability(traceabilityData);
 
             // Traceability's impact
             let transportCO2Impact = computeTransportCO2Impact(traceabilityData);
@@ -34,33 +101,6 @@ exports.getProduct = async (req, res, next) => {
                     transportCO2Impact: transportCO2Impact,
                 },
             });
-            /*
-            Transaction.getProductHistory(function (answer) {
-                res.status(200).json({
-                    success: true,
-                    data: answer,
-                });
-            });
-            */
-            /*
-            var lat = 45.78264;
-            var long = 4.878073;
-            openGeocoder()
-                .reverse(long, lat)
-                .end((err, geocoderRes) => {
-                    if (!err) {
-                        res.status(200).json({
-                            success: true,
-                            message: geocoderRes,
-                        });
-                    } else {
-                        res.status(200).json({
-                            success: false,
-                            message: "reverse geocoder error",
-                        });
-                    }
-                });
-            */
         } else {
             console.log("BARCODE - Impact");
             res.status(501).json({
@@ -81,6 +121,31 @@ exports.getProduct = async (req, res, next) => {
 /*  DELETE */
 
 // Private functions
+// Reverse Geocoder where traceabilityData is passed by reference (complex js object)
+async function reverseGeocodingOnTraceability(traceabilityData) {
+    for (let i = 0; i < traceabilityData.length; i++) {
+        let latToFind = traceabilityData[i].buyer.localisation.latitude;
+        let longToFind = traceabilityData[i].buyer.localisation.longitude;
+        if (latToFind && longToFind) {
+            let reverseGeocoding = await geocoder.reverse({ lat: latToFind, lon: longToFind });
+            traceabilityData[i].buyer.localisation.country = getName(
+                reverseGeocoding[0].countryCode
+            );
+            traceabilityData[i].buyer.localisation.city = reverseGeocoding[0].city;
+        }
+
+        latToFind = traceabilityData[i].seller.localisation.latitude;
+        longToFind = traceabilityData[i].seller.localisation.longitude;
+        if (latToFind && longToFind) {
+            reverseGeocoding = await geocoder.reverse({ lat: latToFind, lon: longToFind });
+            traceabilityData[i].seller.localisation.country = getName(
+                reverseGeocoding[0].countryCode
+            );
+            traceabilityData[i].seller.localisation.city = reverseGeocoding[0].city;
+        }
+    }
+}
+
 // kg CO2 per km or miles
 function computeTransportCO2Impact(traceabilityData) {
     let impactGlobal = 0;
