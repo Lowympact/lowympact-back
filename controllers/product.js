@@ -3,8 +3,8 @@ const Transaction = require("../contracts/transaction");
 
 const NodeGeocoder = require("node-geocoder");
 const NodeGeocoderOptions = {
-    provider: "mapquest",
-    apiKey: process.env.MAPQUESTAPI_KEY,
+    provider: "google",
+    apiKey: process.env.GOOGLEAPI_KEY,
     format: "json",
 };
 const geocoder = NodeGeocoder(NodeGeocoderOptions);
@@ -128,20 +128,18 @@ async function reverseGeocodingOnTraceability(traceabilityData) {
         let longToFind = traceabilityData[i].buyer.localisation.longitude;
         if (latToFind && longToFind) {
             let reverseGeocoding = await geocoder.reverse({ lat: latToFind, lon: longToFind });
-            traceabilityData[i].buyer.localisation.country = getName(
-                reverseGeocoding[0].countryCode
-            );
+            traceabilityData[i].buyer.localisation.country = reverseGeocoding[0].country;
             traceabilityData[i].buyer.localisation.city = reverseGeocoding[0].city;
+            traceabilityData[i].buyer.localisation.address = reverseGeocoding[0].formattedAddress;
         }
 
         latToFind = traceabilityData[i].seller.localisation.latitude;
         longToFind = traceabilityData[i].seller.localisation.longitude;
         if (latToFind && longToFind) {
             reverseGeocoding = await geocoder.reverse({ lat: latToFind, lon: longToFind });
-            traceabilityData[i].seller.localisation.country = getName(
-                reverseGeocoding[0].countryCode
-            );
+            traceabilityData[i].seller.localisation.country = reverseGeocoding[0].country;
             traceabilityData[i].seller.localisation.city = reverseGeocoding[0].city;
+            traceabilityData[i].seller.localisation.address = reverseGeocoding[0].formattedAddress;
         }
     }
 }
