@@ -24,10 +24,10 @@ const PORT = process.env.port || 8080;
 dotenv.config({ path: ".env" });
 
 // Connect to the Blockchain
-const web3 = connectBC();
+global.web3 = connectBC();
 
-Actor.init(web3);
-Transaction.init(web3);
+Actor.init();
+Transaction.init();
 
 // Connect to MongoDB
 connectDB();
@@ -39,10 +39,13 @@ simulation.main();
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 
 // Import routes files
-const userRouter = require("./routes/user");
+// const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 
 app.use((req, res, next) => {
+    console.log(req.get("host"));
+    console.log(req.get("origin"));
+    console.log(req);
     res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token"
@@ -108,7 +111,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routes
 app.use("/api/v1/products", productRouter);
-app.use("/api/v1/users", userRouter);
+// app.use("/api/v1/users", userRouter);
 
 /**
  * @swagger
