@@ -14,7 +14,7 @@ const router = express.Router();
 // anything below will use the middleware
 //router.use(protect);
 //router.use(authorize("admin"));
-// router.use(checkApiKey);
+//router.use(checkApiKey);
 
 /**
  * @swagger
@@ -28,9 +28,9 @@ const router = express.Router();
  *     produces:
  *      - application/json
  *     parameters:
- *      - name: authorization
+ *      - name: api-key
  *        in: header
- *        description: API-Key with Bearer prefix
+ *        description: API-Key
  *        schema:
  *          type: string
  *          format: uuid
