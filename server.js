@@ -39,7 +39,7 @@ simulation.main();
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 
 // Import routes files
-// const userRouter = require("./routes/user");
+const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 
 app.use((req, res, next) => {
@@ -113,7 +113,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routes
 app.use("/api/v1/products", productRouter);
-// app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", userRouter);
 
 /**
  * @swagger
