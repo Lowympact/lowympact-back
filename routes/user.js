@@ -16,119 +16,8 @@ const {
 const router = express.Router();
 
 // anything below will use the middleware
-// router.use(protect);
-// router.use(authorize("admin"));
 // router.use(checkApiKey);
 
-// Get a specific user
-/**
- * @swagger
- * /users/{userId}:
- *   get:
- *     summary: Gets a user by id
- *     tags:
- *       - users
- *     description: >
- *       A detailed description of the user identified his id.
- *       This route is protected and need the user to be auth.
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: api-key
- *         in: header
- *         description: API-Key
- *         schema:
- *           type: string
- *           format: uuid
- *           required: true
- *       - name: authorization
- *         in: header
- *         description: JWT Token for the user's session (can be stored in cookies)
- *         schema:
- *           type: string
- *           format: uuid
- *           required: false
- *       - name: userId
- *         in: path
- *         description: User Identifier
- *         schema:
- *           type: string
- *           required: true
- *     responses:
- *       200:
- *         description: OK
- *       404:
- *         description: A user with the specified ID was not found.
- */
-router.route("/:userId").get(checkJWT, getUser);
-
-// Modify user information and/or password
-/**
- * @swagger
- * /users/{userId}:
- *   put:
- *     summary: Update/change user's informations
- *     tags:
- *       - users
- *     description: >
- *        Update/change the username and/or password. For
- *        the password, the current password must be given
- *        This route is protected and need the user to be auth.
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: username
- *         in: body
- *         description: Username
- *         schema:
- *           type: string
- *           required: false
- *       - name: email
- *         in: body
- *         description: Email
- *         schema:
- *           type: string
- *           format: email
- *           required: false
- *       - name: currentPassword
- *         in: body
- *         description: Current password
- *         schema:
- *           type: string
- *           format: password
- *           required: false
- *       - name: newPassword
- *         in: body
- *         description: New password
- *         schema:
- *           type: string
- *           required: false
- *     responses:
- *       200:
- *        description: OK
- */
-router.route("/:userId").put(checkJWT, updateDetails);
-
-// Delete a user
-/**
- * @swagger
- * /users/{userId}:
- *   delete:
- *     summary: Delete a user account
- *     tags:
- *       - users
- *     description: >
- *        Delete a user account from the database
- *        This route is protected and need the user to be auth.
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *        description: OK
- */
-router.route("/:userId").delete(checkJWT, deleteUser);
-
-// Register a new user
 /**
  * @swagger
  * /users/:
@@ -175,7 +64,6 @@ router.route("/:userId").delete(checkJWT, deleteUser);
  */
 router.route("/").post(register);
 
-// Login
 /**
  * @swagger
  * /users/login:
@@ -215,6 +103,111 @@ router.route("/").post(register);
  *         description: A user with the specified ID was not found.
  */
 router.route("/login").post(login);
+
+/**
+ * @swagger
+ * /users/{userId}:
+ *   get:
+ *     summary: Gets a user by id
+ *     tags:
+ *       - users
+ *     description: >
+ *       A detailed description of the user identified his id.
+ *       This route is protected and need the user to be auth.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: api-key
+ *         in: header
+ *         description: API-Key
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: true
+ *       - name: authorization
+ *         in: header
+ *         description: JWT Token for the user's session (can be stored in cookies)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: false
+ *       - name: userId
+ *         in: path
+ *         description: User Identifier
+ *         schema:
+ *           type: string
+ *           required: true
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: A user with the specified ID was not found.
+ */
+router.route("/:userId").get(checkJWT, getUser);
+
+/**
+ * @swagger
+ * /users/{userId}:
+ *   put:
+ *     summary: Update/change user's informations
+ *     tags:
+ *       - users
+ *     description: >
+ *        Update/change the username and/or password. For
+ *        the password, the current password must be given
+ *        This route is protected and need the user to be auth.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: username
+ *         in: body
+ *         description: Username
+ *         schema:
+ *           type: string
+ *           required: false
+ *       - name: email
+ *         in: body
+ *         description: Email
+ *         schema:
+ *           type: string
+ *           format: email
+ *           required: false
+ *       - name: currentPassword
+ *         in: body
+ *         description: Current password
+ *         schema:
+ *           type: string
+ *           format: password
+ *           required: false
+ *       - name: newPassword
+ *         in: body
+ *         description: New password
+ *         schema:
+ *           type: string
+ *           required: false
+ *     responses:
+ *       200:
+ *        description: OK
+ */
+router.route("/:userId").put(checkJWT, updateDetails);
+
+/**
+ * @swagger
+ * /users/{userId}:
+ *   delete:
+ *     summary: Delete a user account
+ *     tags:
+ *       - users
+ *     description: >
+ *        Delete a user account from the database
+ *        This route is protected and need the user to be auth.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+ */
+router.route("/:userId").delete(checkJWT, deleteUser);
 
 // Request password reset
 /**
