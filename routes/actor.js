@@ -202,6 +202,13 @@ router.route("/:idActor").put(checkJWT, updateActor);
  *        This route is protected and need the user to be auth.
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: idActor
+ *         in: path
+ *         description: Actor's id
+ *         schema:
+ *           type: string
+ *           required: true
  *     responses:
  *       200:
  *        description: OK

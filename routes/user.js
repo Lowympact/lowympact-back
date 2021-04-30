@@ -203,6 +203,13 @@ router.route("/:userId").put(checkJWT, updateDetails);
  *        This route is protected and need the user to be auth.
  *     produces:
  *       - application/json
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: User's id
+ *         schema:
+ *           type: string
+ *           required: true
  *     responses:
  *       200:
  *        description: OK
