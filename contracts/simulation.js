@@ -38,10 +38,9 @@ module.exports = {
         );
 
         const actorBAR1Model = ActorModel.create({
-            actorId: "BAR1",
-            actorName: "BAR1",
-            actorWalletAddress: BAR1.newWalletAccount,
-            actorPasswordHashed: "password",
+            name: "BAR1",
+            walletAddress: BAR1.newWalletAccount,
+            password: "password",
         });
 
         const CAR1 = await Actor.createActor(
@@ -53,10 +52,9 @@ module.exports = {
         );
 
         const actorCAR1Model = ActorModel.create({
-            actorId: "CAR1",
-            actorName: "CAR1",
-            actorWalletAddress: CAR1.newWalletAccount,
-            actorPasswordHashed: "password",
+            name: "CAR1",
+            walletAddress: CAR1.newWalletAccount,
+            password: "password",
         });
 
         const CAR2 = await Actor.createActor(
@@ -68,10 +66,9 @@ module.exports = {
         );
 
         const actorCAR2Model = ActorModel.create({
-            actorId: "CAR2",
-            actorName: "CAR2",
-            actorWalletAddress: CAR2.newWalletAccount,
-            actorPasswordHashed: "password",
+            name: "CAR2",
+            walletAddress: CAR2.newWalletAccount,
+            password: "password",
         });
 
         //dechiffer wallet
