@@ -44,6 +44,9 @@ const productRouter = require("./routes/product");
 
 app.use((req, res, next) => {
     let origin = req.get("origin");
+    if (!origin) {
+        origin = "*";
+    }
     res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-access-token"
