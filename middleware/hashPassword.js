@@ -7,7 +7,7 @@ exports.hashPassword = (req, res, next) => {
         if (err) {
             return next(err);
         }
-        req.actorPasswordHashed = hash;
+        req.body.actorPasswordHashed = hash;
         next();
     });
 };

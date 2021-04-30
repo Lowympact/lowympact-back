@@ -1,4 +1,3 @@
-var web3;
 var Actor;
 
 const contract = require("@truffle/contract");
@@ -10,8 +9,7 @@ Actor = contract(actor_artifact);
 // and to interact with the ethereum blockchain
 // (i.e. create a new instance, deploy it, call its function, etc.)
 module.exports = {
-    init: function (newWeb3) {
-        web3 = newWeb3;
+    init: function () {
         Actor.setProvider(web3.currentProvider);
     },
     // Create a new actor on the bc

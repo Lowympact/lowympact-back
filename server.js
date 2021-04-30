@@ -42,6 +42,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
 // const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 
+/*
 app.use((req, res, next) => {
     res.setHeader(
         "Access-Control-Allow-Headers",
@@ -52,6 +53,7 @@ app.use((req, res, next) => {
 
     next();
 });
+*/
 
 // CORS
 const allowedOrigins = [
