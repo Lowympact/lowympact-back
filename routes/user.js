@@ -65,7 +65,7 @@ router.route("/:userId").get(checkJWT, getUser);
  *     tags:
  *       - users
  *     description: >
- *        Update/change the username, email and password. For
+ *        Update/change the username and/or password. For
  *        the password, the current password must be given
  *        This route is protected and need the user to be auth.
  *     produces:
@@ -169,11 +169,12 @@ router.route("/").post(register);
  *           type: string
  *           format: uuid
  *           required: true
- *       - name: username
+ *       - name: email
  *         in: body
  *         description: User ID
  *         schema:
  *           type: string
+ *           format: email
  *           required: true
  *       - name: password
  *         in: body
@@ -209,11 +210,12 @@ router.route("/login").post(login);
  *           type: string
  *           format: uuid
  *           required: true
- *       - name: username
+ *       - name: email
  *         in: body
  *         description: User ID
  *         schema:
  *           type: string
+ *           format: email
  *           required: true
  *     responses:
  *       200:
