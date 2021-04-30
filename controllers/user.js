@@ -5,7 +5,7 @@ const User = require("../models/user");
 exports.getUser = async (req, res, next) => {
     try {
         const userId = req.jwt.id;
-        if (userId == req.query.userId) {
+        if (userId == req.params.userId) {
             // Get user informations
             const user = await User.findById(userId);
             res.status(200).json({
@@ -53,7 +53,7 @@ exports.login = async (req, res, next) => {
         // Check for user
         // password is set to not be displayed by default
         // the returned password is encrypted
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select("+password");
 
         if (!user) {
             let err = new Error();
@@ -68,7 +68,6 @@ exports.login = async (req, res, next) => {
             err.message = "Incorrect password";
             return next(err);
         }
-
         sendTokenResponse(user, 200, res);
     } catch (error) {
         next(error);
@@ -82,8 +81,8 @@ exports.updateDetails = async (req, res, next) => {
     try {
         const userId = req.jwt.id;
 
-        if (userId == req.query.userId) {
-            const user = await User.findById(userId);
+        if (userId == req.params.userId) {
+            const user = await User.findById(userId).select("+password");
             if (req.body.username) {
                 user.username = req.body.username;
             }
