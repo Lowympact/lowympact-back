@@ -6,8 +6,8 @@ exports.checkJWT = async (req, res, next) => {
         let token;
 
         if (req.headers.authorization) {
-            token = req.headers.authorization.split(" ")[1];
-        } else if (process.env.NODE_ENV === "production" && req.cookies.token) {
+            token = req.headers.authorization;
+        } else if (req.cookies.token) {
             // Set token from cookies
             token = req.cookies.token;
         }
