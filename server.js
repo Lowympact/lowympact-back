@@ -120,6 +120,8 @@ app.use("/api/v1/products", productRouter);
  * /:
  *   get:
  *     summary: Verify API's availability
+ *     tags:
+ *       - availability
  *     description: Check if the API is available at the moment
  *     responses:
  *       200:

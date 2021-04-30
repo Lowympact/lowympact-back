@@ -18,9 +18,11 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/products/{barcode}:
+ * /products/{barcode}:
  *   get:
  *     summary: Gets a product by barcode
+ *     tags:
+ *      - products
  *     description: >
  *        A detailed description of the product identified by barcode.
  *        If the **bcProductId** is passed by parameter, add
