@@ -139,3 +139,26 @@ const sendTokenResponse = (user, statusCode, res) => {
 };
 
 /*  DELETE */
+
+exports.deleteUser = async (req, res, next) => {
+    try {
+        const userId = req.jwt.id;
+
+        if (userId == req.params.userId) {
+            User.deleteOne({ _id: userId }, function (err) {
+                if (err) {
+                    return next(err);
+                }
+            });
+
+            res.status(200).json({
+                success: true,
+            });
+        } else {
+            // A user try to delete another user
+            console.log("You're not authorized to access this route");
+        }
+    } catch (error) {
+        next(error);
+    }
+};

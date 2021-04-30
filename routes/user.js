@@ -4,7 +4,14 @@ const paginationFiltering = require("../middleware/paginationFiltering");
 const { checkApiKey } = require("../middleware/apiKey");
 const { checkJWT } = require("../middleware/checkJWT");
 
-const { register, login, getUser, updateDetails, forgotPassword } = require("../controllers/user");
+const {
+    register,
+    login,
+    getUser,
+    updateDetails,
+    forgotPassword,
+    deleteUser,
+} = require("../controllers/user");
 
 const router = express.Router();
 
@@ -101,6 +108,25 @@ router.route("/:userId").get(checkJWT, getUser);
  *        description: OK
  */
 router.route("/:userId").put(checkJWT, updateDetails);
+
+// Delete a user
+/**
+ * @swagger
+ * /users/{userId}:
+ *   delete:
+ *     summary: Delete a user account
+ *     tags:
+ *       - users
+ *     description: >
+ *        Delete a user account from the database
+ *        This route is protected and need the user to be auth.
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *        description: OK
+ */
+router.route("/:userId").delete(checkJWT, deleteUser);
 
 // Register a new user
 /**
