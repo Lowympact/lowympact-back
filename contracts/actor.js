@@ -52,7 +52,6 @@ module.exports = {
         actorWallet
     ) {
         const seller = await Actor.at(sellerAddress);
-        const accounts = await web3.eth.getAccounts();
 
         var ans = await seller.createTransaction(
             productsInput,

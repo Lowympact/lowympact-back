@@ -21,56 +21,85 @@ resetSimulation = () => {
 
 module.exports = {
     //? Scénario :
-    // - Create 3 actors
-    // - Create 2 transactions
-    // - Given a product id, backtrack all the linked transactions
+    // - Create 4 actors (glass maker, wallnut maker Italy and France, ferrerro factory, shop)
+    // - Create 4 transactions (glass->ferrero, wallnut1->ferrero, wallnut2->ferrero, ferrero->shop)
 
     main: async function () {
         // At the beginning of the simulation, reset all MongoDB data
         resetSimulation();
 
-        const BAR1 = await Actor.createActor(
-            "BAR-85025 ",
-            "Barilla Protenza",
-            "producer",
-            "41.0728191",
-            "15.7028457"
+        const GlassMaker = await Actor.createActor(
+            "GLAS-85025",
+            "Murano Soffiatore di Vetro",
+            "maker",
+            "45.458986",
+            "12.352345"
         );
 
-        const actorBAR1Model = ActorModel.create({
-            name: "BAR1",
-            email: "BAR1@gmail.com",
-            walletAddress: BAR1.newWalletAccount,
+        const GlassMakerModel = ActorModel.create({
+            name: "Murano Soffiatore di Vetro",
+            email: "soffiatore@gmail.com",
+            walletAddress: GlassMaker.newWalletAccount,
             password: "password",
         });
 
-        const CAR1 = await Actor.createActor(
-            "CAR-69100",
-            "Carrefour Villeurbanne",
-            "maker",
-            "45.76478",
-            "4.88037"
+        const WallnutMaker1 = await Actor.createActor(
+            "WALL-16872",
+            "Nocciola produttore di Madesimo",
+            "productor",
+            "46.43669",
+            "9.358031"
         );
 
-        const actorCAR1Model = ActorModel.create({
-            name: "CAR1",
-            email: "CAR1@gmail.com",
-            walletAddress: CAR1.newWalletAccount,
+        const WallnutMaker1Model = ActorModel.create({
+            name: "Nocciola produttore di Madesimo",
+            email: "nocciola@gmail.com",
+            walletAddress: WallnutMaker1.newWalletAccount,
             password: "password",
         });
 
-        const CAR2 = await Actor.createActor(
-            "CAR-69000",
-            "Carrefour Lyon Part Dieu",
-            "maker",
-            "45.761467",
-            "4.857217"
+        const WallnutMaker2 = await Actor.createActor(
+            "WAL2-37919",
+            "Noisettes d'Ardèche",
+            "productor",
+            "44.407452",
+            "4.395401"
         );
 
-        const actorCAR2Model = ActorModel.create({
-            name: "CAR2",
-            email: "CAR2@gmail.com",
-            walletAddress: CAR2.newWalletAccount,
+        const WallnutMaker2Model = ActorModel.create({
+            name: "Noisettes d'Ardèche",
+            email: "ardeche@gmail.com",
+            walletAddress: WallnutMaker2.newWalletAccount,
+            password: "password",
+        });
+
+        const FerreroFactory = await Actor.createActor(
+            "FERR-36189",
+            "Ferrero Factory Milano",
+            "maker",
+            "45.4654219",
+            "9.1859243"
+        );
+
+        const FerreroFactoryModel = ActorModel.create({
+            name: "Ferrero Factory Milano",
+            email: "factory@gmail.com",
+            walletAddress: FerreroFactory.newWalletAccount,
+            password: "password",
+        });
+
+        const GroceryShop = await Actor.createActor(
+            "SHOP-36189",
+            "Alla Casa",
+            "shop",
+            "45.4408474",
+            "12.3155151"
+        );
+
+        const GroceryShopModel = ActorModel.create({
+            name: "Alla Casa",
+            email: "casa@gmail.com",
+            walletAddress: GroceryShop.newWalletAccount,
             password: "password",
         });
 
@@ -88,40 +117,88 @@ module.exports = {
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
-            CAR1.smartContractActorAddress,
-            CAR2.smartContractActorAddress, // string: Buyer eth address
-            "transaction1", // string: idTransaction,
+            GlassMaker.smartContractActorAddress,
+            FerreroFactory.smartContractActorAddress, // string: Buyer eth address
+            "Glass->Factory", // string: idTransaction,
             Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Transport type
-            CAR1.newWalletAccount
+            GlassMaker.newWalletAccount
         );
 
         const transaction2 = await Actor.createTransaction(
-            [
-                {
-                    productId: "2",
-                    addressTransaction: transaction1,
-                },
-            ],
             [
                 {
                     productId: "3",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
-            BAR1.smartContractActorAddress,
-            CAR2.smartContractActorAddress, // string: Buyer eth address
-            "transaction2", // string: idTransaction,
+            [
+                {
+                    productId: "4",
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
+            ],
+            WallnutMaker1.smartContractActorAddress,
+            FerreroFactory.smartContractActorAddress, // string: Buyer eth address
+            "Wallnut1->Factory", // string: idTransaction,
             Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
-            BAR1.newWalletAccount
+            WallnutMaker1.newWalletAccount
+        );
+
+        const transaction3 = await Actor.createTransaction(
+            [
+                {
+                    productId: "5",
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
+            ],
+            [
+                {
+                    productId: "6",
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
+            ],
+            WallnutMaker2.smartContractActorAddress,
+            FerreroFactory.smartContractActorAddress, // string: Buyer eth address
+            "Wallnut2->Factory", // string: idTransaction,
+            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
+            WallnutMaker2.newWalletAccount
+        );
+
+        const transaction4 = await Actor.createTransaction(
+            [
+                {
+                    productId: "2",
+                    addressTransaction: transaction1,
+                },
+                {
+                    productId: "4",
+                    addressTransaction: transaction2,
+                },
+                {
+                    productId: "6",
+                    addressTransaction: transaction3,
+                },
+            ],
+            [
+                {
+                    productId: "3017620425035", //id PotNutella Code barre
+                    addressTransaction: "0x0000000000000000000000000000000000000000",
+                },
+            ],
+            FerreroFactory.smartContractActorAddress,
+            GroceryShop.smartContractActorAddress, // string: Buyer eth address
+            "Factory->Shop", // string: idTransaction,
+            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
+            FerreroFactory.newWalletAccount
         );
 
         //Front export
         console.log("Export mockTransactionFront");
-        module.exports.mockTransactionFront = transaction2;
+        module.exports.mockTransactionFront = transaction4;
 
-        const productHistory = await Transaction.getProductHistory(transaction2);
+        const productHistory = await Transaction.getProductHistory(transaction4);
 
-        //console.log(productHistory);
+        console.log(productHistory);
     },
 
     mockTransactionFront: null,
