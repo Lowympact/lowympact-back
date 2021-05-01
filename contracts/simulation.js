@@ -6,8 +6,8 @@ const Transaction = require("./transaction");
 const Transaction_artifact = require("./builds/transaction.json");
 var Transaction_contract = contract(Transaction_artifact);
 
-const Actor_artifact = require("./builds/transaction.json");
-var Actor_contract = contract(Transaction_artifact);
+const Actor_artifact = require("./builds/transaction.json"); //?
+var Actor_contract = contract(Transaction_artifact); //?
 
 const ActorModel = require("../models/actor");
 const UserModel = require("../models/actor");
@@ -103,7 +103,6 @@ module.exports = {
             password: "password",
         });
 
-        //dechiffer wallet
         const transaction1 = await Actor.createTransaction(
             [
                 {
@@ -160,7 +159,7 @@ module.exports = {
             WallnutMaker2.smartContractActorAddress,
             FerreroFactory.smartContractActorAddress, // string: Buyer eth address
             "Wallnut2->Factory", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
+            Transaction_contract.enums.TransportType.Truck, // Transaction.TransportType: Transport type
             WallnutMaker2.newWalletAccount
         );
 
@@ -188,7 +187,7 @@ module.exports = {
             FerreroFactory.smartContractActorAddress,
             GroceryShop.smartContractActorAddress, // string: Buyer eth address
             "Factory->Shop", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
+            Transaction_contract.enums.TransportType.Boat, // Transaction.TransportType: Transport type
             FerreroFactory.newWalletAccount
         );
 
