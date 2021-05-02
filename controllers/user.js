@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Axios = require("axios");
 
 /*  GET */
 
@@ -23,25 +24,60 @@ exports.getUser = async (req, res, next) => {
 
 exports.getUserHistory = async (req, res, next) => {
 	try {
-		const userId = req.jwt.id;
+		const userId = req.params.userId;
+		//uncomment next line for authenttication check
+		// const userId = req.jwt.id;
 		if (userId == req.params.userId) {
 			// Get user informations
-			let userHistory = await User.findById(userId);
+			let userHistory = await User.findById(userId, "history");
 
-			if (userHistory) {
-				console.log(userHistory);
+			if (userHistory && userHistory.history) {
+				let promises = userHistory.history.map(async (p) => {
+					if (
+						p &&
+						p.productInformations &&
+						p.productInformations[0]
+					) {
+						const apiRes = await Axios({
+							method: "GET",
+							url: `https://world.openfoodfacts.org/api/v0/product/${p.productInformations[0].barcode}.json/`,
+						});
+						console.log(apiRes);
+
+						return {
+							id: p._id,
+							name: apiRes.data.product.product_name,
+							image: apiRes.data.product.image_url,
+							brand: apiRes.data.product.brands,
+							label: apiRes.data.product.ecoscore_grade,
+							barcode: p.productInformations[0].barcode,
+							bcProductId: p.productInformations[0].bcProductId,
+						};
+					} else {
+						return {};
+					}
+				});
+
+				const response = await Promise.all(promises);
+
+				res.status(200).json({
+					success: true,
+					data: response,
+				});
+			} else {
+				res.status(200).json({
+					success: true,
+					data: [],
+				});
 			}
-
-			res.status(200).json({
-				success: true,
-				data: userHistory,
-			});
 		} else {
 			// A user try to access to another user
 			console.log("You're not authorized to access this route");
+			res.status(401).json({
+				message: "You're not authorized to access this route",
+			});
 		}
 	} catch (error) {
-		console.log("here: ", error);
 		next(error);
 	}
 };

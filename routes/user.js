@@ -185,7 +185,8 @@ router.route("/:userId").get(checkJWT, getUser);
  *       404:
  *         description: A user with the specified ID was not found.
  */
-router.route("/history/:userId").get(checkJWT, getUserHistory);
+// router.route("/history/:userId").get(checkJWT, getUserHistory);
+router.route("/history/:userId").get(getUserHistory);
 
 /**
  * @swagger
