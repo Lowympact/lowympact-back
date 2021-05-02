@@ -197,6 +197,36 @@ const sendTokenResponse = (user, statusCode, res) => {
         });
 };
 
+exports.addProductInHistory = async (req, res, next) => {
+    try {
+        const userId = req.jwt.id;
+
+        if (userId == req.params.userId) {
+            const user = await User.findById(userId);
+
+            // Add product in user history
+            user.history.push({
+                barcode: req.body.barcode,
+                bcProductAddress: req.body.bcProductAddress,
+            });
+
+            user.save();
+
+            res.status(200).json({
+                success: true,
+                data: user,
+            });
+        } else {
+            // A user try to modify the history of another user
+            res.status(401).json({
+                message: "You're not authorized to access this route",
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
 /*  DELETE */
 
 exports.deleteUser = async (req, res, next) => {

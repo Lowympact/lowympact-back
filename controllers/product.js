@@ -18,14 +18,6 @@ const simulation = require("../contracts/simulation");
 
 exports.getProduct = async (req, res, next) => {
     try {
-        let user;
-
-        // Get user if connected
-        if (req.cookies.token) {
-            const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
-            user = await User.findById(decoded.id);
-        }
-
         if (req.query.bcProductId) {
             console.log("QRCODE - Traçabilité");
 
@@ -98,16 +90,6 @@ exports.getProduct = async (req, res, next) => {
 
             // Traceability's impact
             let transportCO2Impact = computeTransportCO2Impact(traceabilityData);
-
-            // Add product in user history
-            if (user) {
-                user.history.push({
-                    barcode: req.params.barcode,
-                    bcProductAddress: req.query.bcProductId,
-                });
-
-                user.save();
-            }
 
             // TODO : Others env impacts
 

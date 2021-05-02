@@ -5,13 +5,14 @@ const { checkApiKey } = require("../middleware/apiKey");
 const { checkJWT } = require("../middleware/checkJWT");
 
 const {
-	register,
-	login,
-	getUser,
-	getUserHistory,
-	updateDetails,
-	forgotPassword,
-	deleteUser,
+    register,
+    login,
+    getUser,
+    getUserHistory,
+    updateDetails,
+    forgotPassword,
+    deleteUser,
+    addProductInHistory,
 } = require("../controllers/user");
 
 const router = express.Router();
@@ -185,8 +186,63 @@ router.route("/:userId").get(checkJWT, getUser);
  *       404:
  *         description: A user with the specified ID was not found.
  */
-// router.route("/history/:userId").get(checkJWT, getUserHistory);
-router.route("/history/:userId").get(getUserHistory);
+router.route("/history/:userId").get(checkJWT, getUserHistory);
+
+/**
+ * @swagger
+ * /users/history/{userId}:
+ *   put:
+ *     summary: Add a product in user's history
+ *     tags:
+ *       - users
+ *     description: >
+ *       Add the barcode and the blockchain address (if it exists) of
+ *       the product in user's history. This route is protected and
+ *       need the user to be auth.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: api-key
+ *         in: header
+ *         description: API-Key
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: true
+ *       - name: authorization
+ *         in: header
+ *         description: JWT Token for the user's session (can be stored in cookies)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: false
+ *       - name: userId
+ *         in: path
+ *         description: User Identifier
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: barcode
+ *         in: body
+ *         description: Product barcode
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: bcProductAddress
+ *         in: body
+ *         description: Product blockchain address
+ *         schema:
+ *           type: string
+ *           required: false
+ *     responses:
+ *       200:
+ *         description: OK
+ *       401:
+ *         description: A user try to modify the history of another user
+ *       404:
+ *         description: A user with the specified ID was not found.
+ */
+router.route("/history/:userId").put(checkJWT, addProductInHistory);
 
 /**
  * @swagger
