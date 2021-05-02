@@ -34,10 +34,10 @@ exports.getUserHistory = async (req, res, next) => {
 
             if (userHistory && userHistory.history) {
                 let promises = userHistory.history.map(async (p) => {
-                    if (p && p.productInformations && p.productInformations[0]) {
+                    if (p) {
                         const apiRes = await Axios({
                             method: "GET",
-                            url: `https://world.openfoodfacts.org/api/v0/product/${p.productInformations[0].barcode}.json/`,
+                            url: `https://world.openfoodfacts.org/api/v0/product/${p.barcode}.json/`,
                         });
                         console.log(apiRes);
 
@@ -47,8 +47,8 @@ exports.getUserHistory = async (req, res, next) => {
                             image: apiRes.data.product.image_url,
                             brand: apiRes.data.product.brands,
                             label: apiRes.data.product.ecoscore_grade,
-                            barcode: p.productInformations[0].barcode,
-                            bcProductId: p.productInformations[0].bcProductId,
+                            barcode: p.barcode,
+                            bcProductId: p.bcProductId,
                         };
                     } else {
                         return {};
@@ -179,7 +179,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     const token = user.getSignedJwtToken();
 
     const options = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 3600 * 1000),
+        expires: new Date(Date.now() + process.env.JWT_EXPIRE * 24 * 3600 * 1000),
         httpOnly: true,
     };
 
@@ -193,7 +193,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         .json({
             success: true,
             token,
-            id: user.id,
+            _id: user._id,
         });
 };
 
