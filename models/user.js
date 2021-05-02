@@ -28,16 +28,12 @@ const UserSchema = new mongoose.Schema({
     },
     history: [
         {
-            productInformations: [
-                {
-                    barcode: {
-                        type: String,
-                    },
-                    bcProductAddress: {
-                        type: String,
-                    },
-                },
-            ],
+            barcode: {
+                type: String,
+            },
+            bcProductAddress: {
+                type: String,
+            },
         },
     ],
 });
