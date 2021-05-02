@@ -1,6 +1,6 @@
 const express = require("express");
 
-const paginationFiltering = require("../middleware/paginationFiltering");
+// const paginationFiltering = require("../middleware/paginationFiltering");
 const { checkApiKey } = require("../middleware/apiKey");
 
 const { getProduct } = require("../controllers/product");

@@ -1,16 +1,17 @@
 const express = require("express");
 
-const paginationFiltering = require("../middleware/paginationFiltering");
+// const paginationFiltering = require("../middleware/paginationFiltering");
 const { checkApiKey } = require("../middleware/apiKey");
 const { checkJWT } = require("../middleware/checkJWT");
 
 const {
-    register,
-    login,
-    getUser,
-    updateDetails,
-    forgotPassword,
-    deleteUser,
+	register,
+	login,
+	getUser,
+	getUserHistory,
+	updateDetails,
+	forgotPassword,
+	deleteUser,
 } = require("../controllers/user");
 
 const router = express.Router();
@@ -144,6 +145,48 @@ router.route("/login").post(login);
  *         description: A user with the specified ID was not found.
  */
 router.route("/:userId").get(checkJWT, getUser);
+
+/**
+ * @swagger
+ * /users/history/{userId}:
+ *   get:
+ *     summary: Gets a user history by id
+ *     tags:
+ *       - users
+ *     description: >
+ *       A detailed description of the user history,  identified his id.
+ *       This route is protected and need the user to be auth.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: api-key
+ *         in: header
+ *         description: API-Key
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: true
+ *       - name: authorization
+ *         in: header
+ *         description: JWT Token for the user's session (can be stored in cookies)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: false
+ *       - name: userId
+ *         in: path
+ *         description: User Identifier
+ *         schema:
+ *           type: string
+ *           required: true
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: A user with the specified ID was not found.
+ */
+// router.route("/history/:userId").get(checkJWT, getUserHistory);
+router.route("/history/:userId").get(getUserHistory);
 
 /**
  * @swagger
