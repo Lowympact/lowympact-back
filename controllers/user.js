@@ -193,7 +193,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 		.json({
 			success: true,
 			token,
-			id: user.id,
+			_id: user._id,
 		});
 };
 
