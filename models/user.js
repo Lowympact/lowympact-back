@@ -57,7 +57,7 @@ UserSchema.methods.getSignedJwtToken = function () {
 	//we have access to the user id since this is a method
 	//options: expiresIn
 	return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-		expiresIn: process.env.JWT_COOKIE_EXPIRE,
+		expiresIn: process.env.JWT_EXPIRE,
 	});
 };
 
