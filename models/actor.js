@@ -30,17 +30,6 @@ const ActorSchema = new mongoose.Schema({
     },
 });
 
-// Encrypt password
-ActorSchema.pre("save", function (next) {
-    actor = this;
-    bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(actor.password, salt, function (err, hash) {
-            actor.password = hash;
-            next();
-        });
-    });
-});
-
 // Sign JWT and return
 ActorSchema.methods.getSignedJWT = function () {
     //we have access to the actor id since this is a method

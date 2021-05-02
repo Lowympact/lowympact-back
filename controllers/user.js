@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const Axios = require("axios");
+const { hashPassword } = require("../middleware/hashPassword");
 
 /*  GET */
 
@@ -82,7 +83,8 @@ exports.getUserHistory = async (req, res, next) => {
 
 exports.register = async (req, res, next) => {
     try {
-        const { username, email, password } = req.body;
+        let { username, email, password } = req.body;
+        password = hashPassword(password);
         //Create user
         const user = await User.create({
             username,
@@ -153,7 +155,7 @@ exports.updateDetails = async (req, res, next) => {
                     return next(error);
                 }
 
-                user.password = req.body.newPassword;
+                user.password = hashPassword(req.body.newPassword);
             }
 
             user.save();

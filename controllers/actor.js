@@ -1,5 +1,6 @@
 const Actor = require("../models/actor");
 const { sendJWT } = require("../util/sendJWT");
+const { hashPassword } = require("../middleware/hashPassword");
 
 /*  GET */
 
@@ -68,6 +69,7 @@ exports.registerActor = async (req, res, next) => {
         req.body.walletAddress = newWalletAccount;
 
         // create a user a new actor
+        req.body.password = hashPassword(req.body.password);
         const actor = await Actor.create(req.body);
 
         res.status(201).json({
@@ -84,6 +86,9 @@ exports.registerActor = async (req, res, next) => {
 exports.updateActor = async (req, res, next) => {
     try {
         if (req.jwt.id === req.params.idActor) {
+            if (req.body.password) {
+                req.body.password = hashPassword(req.body.password);
+            }
             const actor = await Actor.findByIdAndUpdate(req.params.idActor, req.body, {
                 new: true,
                 runValidators: true,

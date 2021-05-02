@@ -38,17 +38,6 @@ const UserSchema = new mongoose.Schema({
     ],
 });
 
-//Encrypt password
-UserSchema.pre("save", function (next) {
-    user = this;
-    bcrypt.genSalt(10, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            user.password = hash;
-            next();
-        });
-    });
-});
-
 //Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
     //we have access to the user id since this is a method
