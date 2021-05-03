@@ -28,7 +28,7 @@ module.exports = {
     // Finish a pending transaction
 };
 
-getTransactionInformation = async (transactionAddress) => {
+getTransactionInformation = async (transactionAddress, depth = 0) => {
     // Get all informations
     var transaction = await Transaction.at(transactionAddress);
 
@@ -44,6 +44,7 @@ getTransactionInformation = async (transactionAddress) => {
     var result = [];
     var jsonTransaction = {
         id: transactionInformations._id,
+        depth: depth,
         buyer: {
             id: buyerInformations._id,
             name: buyerInformations._name,
@@ -75,7 +76,7 @@ getTransactionInformation = async (transactionAddress) => {
     for (let i = 0; i < jsonTransaction.productsInput.length; i++) {
         let address = jsonTransaction.productsInput[i].addressTransaction;
         if (address !== "0x0000000000000000000000000000000000000000") {
-            result = result.concat(await getTransactionInformation(address));
+            result = result.concat(await getTransactionInformation(address, depth + 1));
         }
     }
 

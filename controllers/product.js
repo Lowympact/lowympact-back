@@ -116,7 +116,10 @@ function computeTransportCO2Impact(traceabilityData) {
         lat2 = parseFloat(element.buyer.localisation.latitude);
         long2 = parseFloat(element.buyer.localisation.longitude);
         dist = getDistanceFromLatLonInKm(lat1, long1, lat1, long2);
-        impactGlobal += impactCoeff * dist;
+        let impactlocal = impactCoeff * dist;
+        impactGlobal += impactlocal;
+        element.dist = { value: dist, unit: "km" };
+        element.TransportCO2Impact = { value: impactlocal, unit: "kg(C02)/km/passenger" };
     });
     return impactGlobal;
 }
