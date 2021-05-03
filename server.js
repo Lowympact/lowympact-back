@@ -42,57 +42,54 @@ const actorRouter = require("./routes/actor");
 const transactionRouter = require("./routes/transaction");
 
 app.use((req, res, next) => {
-	let origin = req.get("origin");
-	if (!origin) {
-		origin = "*";
-	}
-	res.setHeader(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept,api-key, Authorization, x-access-token"
-	);
-	res.setHeader("Access-Control-Allow-Origin", origin);
-	res.setHeader(
-		"Access-Control-Allow-Methods",
-		"GET, POST, PATCH, DELETE, OPTIONS, PUT"
-	);
-	res.setHeader("Access-Control-Allow-Credentials", true);
+    let origin = req.get("origin");
+    if (!origin) {
+        origin = "*";
+    }
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept,api-key, Authorization, x-access-token"
+    );
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS, PUT");
+    res.setHeader("Access-Control-Allow-Credentials", true);
 
-	// if (req.method == "OPTIONS") {
-	// 	res.sendStatus(200);
-	// }
+    // if (req.method == "OPTIONS") {
+    // 	res.sendStatus(200);
+    // }
 
-	next();
+    next();
 });
 
 // CORS
 const allowedOrigins = [
-	"http://localhost:3000",
-	"https://localhost:5000",
-	"http://api.lowympact.fr",
-	"https://api.lowympact.fr",
-	"http://lowympact.fr/",
-	"https://lowympact.fr/",
+    "http://localhost:3000",
+    "https://localhost:5000",
+    "http://api.lowympact.fr",
+    "https://api.lowympact.fr",
+    "http://lowympact.fr/",
+    "https://lowympact.fr/",
 ];
 if (process.env.MODE !== "development") {
-	app.use(
-		cors({
-			origin: function (origin, callback) {
-				// allow requests with no origin
-				// (like mobile apps or curl requests)
-				if (!origin) return callback(null, true);
+    app.use(
+        cors({
+            origin: function (origin, callback) {
+                // allow requests with no origin
+                // (like mobile apps or curl requests)
+                if (!origin) return callback(null, true);
 
-				if (allowedOrigins.indexOf(origin) === -1) {
-					var msg =
-						"The CORS policy for this site does not " +
-						"allow access from the specified Origin : " +
-						origin;
-					return callback(new Error(msg), false);
-				}
+                if (allowedOrigins.indexOf(origin) === -1) {
+                    var msg =
+                        "The CORS policy for this site does not " +
+                        "allow access from the specified Origin : " +
+                        origin;
+                    return callback(new Error(msg), false);
+                }
 
-				return callback(null, true);
-			},
-		})
-	);
+                return callback(null, true);
+            },
+        })
+    );
 }
 
 // Body parser
@@ -139,13 +136,13 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
  *         description: OK
  */
 app.get("/", function (req, res) {
-	res.status(200);
-	res.json({ message: "Lowympact API is Online!" });
+    res.status(200);
+    res.json({ message: "Lowympact API is Online!" });
 });
 
 //Custom error handler
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-	console.log(`Server running in ${process.env.MODE} on port ${PORT}`);
+    console.log(`Server running in ${process.env.MODE} on port ${PORT}`);
 });
