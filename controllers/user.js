@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Axios = require("axios");
 const { hashPassword } = require("../middleware/hashPassword");
+const { findOne } = require("../models/user");
 
 /*  GET */
 
@@ -240,6 +241,57 @@ exports.addProductInHistory = async (req, res, next) => {
             });
         } else {
             // A user try to modify the history of another user
+            res.status(401).json({
+                message: "You're not authorized to access this route",
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.addToCart = async (req, res, next) => {
+    try {
+        if (req.jwt.id == req.params.userId) {
+            //Peut-être ObjectId(req.jwt.id)
+            const user = await User.findById(req.params.id);
+
+            let ItemQR;
+            let ItemBar;
+
+            user.cart.forEach(element => {
+                if(element.date - Date.now() < 2) {
+                    if ( (req.body.bcProductAddress != undefined && element.bcProductAddress == req.body.bcProductAddress) ){
+                        ItemQR = element;
+                    } else if(element.barcode == req.body.barcode) {
+                        ItemBar = element;
+                    }
+                }
+            });
+
+            let item;
+            if (ItemQR) item = ItemQR;
+            else if (ItemBar) item = ItemBar;
+            else {
+                item = {
+                    barcode : req.params.barcode,
+                    bcProductAddress: req.params.bcProductAddress ? req.params.bcProductAddress:undefined,
+                    date : Date.now(),
+                };
+            }
+
+            item.quantity += 1;
+
+            user.cart.push(item);
+
+            user.save();
+
+            res.status(200).json({
+                success: true,
+                data: user,
+            });
+        } else {
+            // An user try to modify the history of another user
             res.status(401).json({
                 message: "You're not authorized to access this route",
             });

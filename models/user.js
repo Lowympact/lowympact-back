@@ -40,6 +40,25 @@ const UserSchema = new mongoose.Schema({
             },
         },
     ],
+    cart: [
+        {
+            barcode: {
+                type: String,
+                required: true,
+            },
+            bcProductAddress: {
+                type: String,
+            },
+            date: {
+                type: Date,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                default: 0,
+            },
+        }
+    ]
 });
 
 //Sign JWT and return
