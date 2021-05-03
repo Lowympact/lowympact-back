@@ -241,10 +241,7 @@ module.exports = {
             FerreroFactory.newWalletAccount
         );
 
-        //Front export
-        console.log("Export mockTransactionFront");
-        module.exports.mockTransactionFront = 7;
+        //End of setup
+        console.log("Blockchain's simulation done");
     },
-
-    mockTransactionFront: null,
 };

@@ -12,8 +12,6 @@ const NodeGeocoderOptions = {
 };
 const geocoder = NodeGeocoder(NodeGeocoderOptions);
 
-const simulation = require("../contracts/simulation");
-
 const ProductModel = require("../models/product");
 const mongoose = require("mongoose");
 
@@ -24,7 +22,7 @@ exports.getProduct = async (req, res, next) => {
         if (req.query.bcProductId) {
             // Mock Front
             if (req.query.bcProductId == "idbc") {
-                req.query.bcProductId = simulation.mockTransactionFront;
+                req.query.bcProductId = "7";
             }
 
             //Find product's last address on the blockchain
