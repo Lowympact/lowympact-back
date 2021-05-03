@@ -243,7 +243,7 @@ module.exports = {
 
         //Front export
         console.log("Export mockTransactionFront");
-        module.exports.mockTransactionFront = transaction4;
+        module.exports.mockTransactionFront = 7;
     },
 
     mockTransactionFront: null,
