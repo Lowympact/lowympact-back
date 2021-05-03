@@ -66,6 +66,8 @@ getTransactionInformation = async (transactionAddress, depth = 0) => {
                 latitude: sellerInformations._latitude,
             },
         },
+        productsInput: [],
+        productsOutput: [],
         transport: getTransportType(transactionInformations._transport),
         date: transactionInformations._date.toNumber(),
         isFinished: transactionInformations._isFinished,
@@ -77,18 +79,24 @@ getTransactionInformation = async (transactionAddress, depth = 0) => {
         let product = await ProductModel.findById(
             transactionInformations._productsInput[i].productId
         );
-        transactionInformations._productsInput[i] = product;
+        jsonTransaction.productsInput.push({
+            productId: product._id,
+            productName: product.productName,
+            addressTransaction: transactionInformations._productsInput[i].addressTransaction,
+        });
     }
-    jsonTransaction.productsInput = transactionInformations._productsInput;
 
     //Find output product's name
     for (let i = 0; i < transactionInformations._productsOutput.length; i++) {
         let product = await ProductModel.findById(
             transactionInformations._productsOutput[i].productId
         );
-        transactionInformations._productsOutput[i] = product;
+        jsonTransaction.productsOutput.push({
+            productId: product._id,
+            productName: product.productName,
+            addressTransaction: transactionInformations._productsOutput[i].addressTransaction,
+        });
     }
-    jsonTransaction.productsOutput = transactionInformations._productsOutput;
 
     result.push(jsonTransaction);
 
@@ -99,8 +107,6 @@ getTransactionInformation = async (transactionAddress, depth = 0) => {
             result = result.concat(await getTransactionInformation(address, depth + 1));
         }
     }
-
-    console;
 
     return result;
 };
