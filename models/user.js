@@ -34,8 +34,31 @@ const UserSchema = new mongoose.Schema({
             bcProductAddress: {
                 type: String,
             },
+            insertAt: {
+                type: Date,
+                default: Date.now(),
+            },
         },
     ],
+    cart: [
+        {
+            barcode: {
+                type: String,
+                required: true,
+            },
+            bcProductAddress: {
+                type: String,
+            },
+            date: {
+                type: Date,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                default: 0,
+            },
+        }
+    ]
 });
 
 //Sign JWT and return

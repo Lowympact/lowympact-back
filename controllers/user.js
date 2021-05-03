@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Axios = require("axios");
 const { hashPassword } = require("../middleware/hashPassword");
+const { findOne } = require("../models/user");
 
 /*  GET */
 
@@ -212,8 +213,25 @@ exports.addProductInHistory = async (req, res, next) => {
                 data.bcProductAddress = req.body.bcProductAddress;
             }
 
-            // Add product in user history
-            user.history.push(data);
+            // Check the presence of the same product in history
+            let previousMatchingProduct;
+            if (req.body.bcProductAddress) {
+                previousMatchingProduct = user.history.find(
+                    (t) => t.barcode == data.barcode && t.bcProductAddress == data.bcProductAddress
+                );
+            } else {
+                previousMatchingProduct = user.history.find(
+                    (t) => t.barcode == data.barcode && !t.bcProductAddress
+                );
+            }
+
+            if (previousMatchingProduct) {
+                // Update product's date
+                previousMatchingProduct.insertAt = Date.now();
+            } else {
+                // Add product in user history
+                user.history.push(data);
+            }
 
             user.save();
 
@@ -223,6 +241,67 @@ exports.addProductInHistory = async (req, res, next) => {
             });
         } else {
             // A user try to modify the history of another user
+            res.status(401).json({
+                message: "You're not authorized to access this route",
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.addToCart = async (req, res, next) => {
+    try {
+        if (req.jwt.id == req.params.userId) {
+            const user = await User.findById(req.params.userId);
+
+            let ItemQR;
+            let ItemBar;
+
+            var prevdate = new Date();
+            prevdate.setHours(prevdate.getHours() - 2);
+
+            user.cart.forEach((element) => {
+                if (element.date > prevdate) {
+                    console.log(element.bcProductAddress);
+                    if (
+                        req.body.bcProductAddress != undefined &&
+                        element.bcProductAddress == req.body.bcProductAddress
+                    ) {
+                        ItemQR = element;
+                    } else if (element.barcode == req.body.barcode) {
+                        ItemBar = element;
+                    }
+                }
+            });
+
+            let item;
+            if (ItemQR) {
+                item = ItemQR;
+                item.quantity += 1;
+            } else if (ItemBar && !ItemBar.bcProductAddress) {
+                item = ItemBar;
+                item.quantity += 1;
+            } else {
+                item = {
+                    barcode: req.body.barcode,
+                    bcProductAddress: req.body.bcProductAddress
+                        ? req.body.bcProductAddress
+                        : undefined,
+                    date: Date.now(),
+                    quantity: 1,
+                };
+                user.cart.push(item);
+            }
+
+            user.save();
+
+            res.status(200).json({
+                success: true,
+                data: user,
+            });
+        } else {
+            // An user try to modify the history of another user
             res.status(401).json({
                 message: "You're not authorized to access this route",
             });

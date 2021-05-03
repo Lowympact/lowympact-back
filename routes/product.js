@@ -23,7 +23,7 @@ const router = express.Router();
  *      - products
  *     description: >
  *        A detailed description of the product identified by barcode.
- *        If the **bcProductId** is passed by parameter, add
+ *        With the **bcProductId** is passed by parameter, add
  *        traceability information on response
  *     produces:
  *      - application/json
@@ -44,10 +44,14 @@ const router = express.Router();
  *        in: query
  *        description: Product Blockchain Address where this product is an output
  *        type: string
- *        required: false
+ *        required: true
  *     responses:
  *       200:
  *         description: OK
+ *       400:
+ *         description: BAD REQUEST
+ *       404:
+ *         description: PRODUCT NOT FOUND ON THE BLOCKCHAIN
  */
 router.route("/:barcode").get(getProduct);
 

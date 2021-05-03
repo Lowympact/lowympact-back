@@ -11,6 +11,8 @@ var Actor_contract = contract(Transaction_artifact); //?
 
 const ActorModel = require("../models/actor");
 const UserModel = require("../models/actor");
+const ProductModel = require("../models/product");
+
 const mongoose = require("mongoose");
 
 const { hashPassword } = require("../middleware/hashPassword");
@@ -18,6 +20,9 @@ const { hashPassword } = require("../middleware/hashPassword");
 resetSimulation = () => {
     mongoose.connection.collections["actors"].drop((err) => {
         console.log("Actor collection dropped.");
+    });
+    mongoose.connection.collections["products"].drop((err) => {
+        console.log("Product collection dropped.");
     });
 };
 
@@ -125,6 +130,41 @@ module.exports = {
             actorContractAddress: GroceryShop.smartContractActorAddress,
         });
 
+        const sable = ProductModel.create({
+            _id: 1,
+            productName: "Sable",
+        });
+
+        const potEnVerre = ProductModel.create({
+            _id: 2,
+            productName: "Pot en verre",
+        });
+
+        const noisetteMadesimo = ProductModel.create({
+            _id: 3,
+            productName: "Noisettes de Madesimo",
+        });
+
+        const noisetteMadesimoConcasse = ProductModel.create({
+            _id: 4,
+            productName: "Noisettes de Madesimo concassées",
+        });
+
+        const noisetteArdeche = ProductModel.create({
+            _id: 5,
+            productName: "Noisettes d'Ardèche",
+        });
+
+        const noisetteArdecheConcasse = ProductModel.create({
+            _id: 6,
+            productName: "Noisettes d'Ardèche concassées",
+        });
+
+        const nutella = ProductModel.create({
+            _id: 7,
+            productName: "Nutella 1kg",
+        });
+
         const transaction1 = await Actor.createTransaction(
             [
                 {
@@ -202,7 +242,7 @@ module.exports = {
             ],
             [
                 {
-                    productId: "idbc", //id PotNutella QRCode
+                    productId: "7",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -213,14 +253,7 @@ module.exports = {
             FerreroFactory.newWalletAccount
         );
 
-        //Front export
-        console.log("Export mockTransactionFront");
-        module.exports.mockTransactionFront = transaction4;
-
-        const productHistory = await Transaction.getProductHistory(transaction4);
-
-        console.log(productHistory);
+        //End of setup
+        console.log("Blockchain's simulation done");
     },
-
-    mockTransactionFront: null,
 };

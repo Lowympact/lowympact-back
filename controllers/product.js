@@ -12,44 +12,53 @@ const NodeGeocoderOptions = {
 };
 const geocoder = NodeGeocoder(NodeGeocoderOptions);
 
-const simulation = require("../contracts/simulation");
+const ProductModel = require("../models/product");
+const mongoose = require("mongoose");
 
 /*  GET */
 
 exports.getProduct = async (req, res, next) => {
     try {
         if (req.query.bcProductId) {
-            console.log("QRCODE - Traçabilité");
-
             // Mock Front
             if (req.query.bcProductId == "idbc") {
-                req.query.bcProductId = simulation.mockTransactionFront;
+                req.query.bcProductId = "7";
             }
 
-            // Blockchain's Traceability
-            let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
+            //Find product's last address on the blockchain
+            let productModel = await ProductModel.findById(req.query.bcProductId);
 
-            // Fill the traceability with reverse geocoding
-            await reverseGeocodingOnTraceability(traceabilityData);
+            if (productModel) {
+                // Blockchain's Traceability
+                let traceabilityData = await Transaction.getProductHistory(
+                    productModel.transactionAddress
+                );
 
-            // Traceability's impact
-            let transportCO2Impact = computeTransportCO2Impact(traceabilityData);
+                // Fill the traceability with reverse geocoding
+                await reverseGeocodingOnTraceability(traceabilityData);
 
-            // TODO : Others env impacts
+                // Traceability's impact
+                let transportCO2Impact = computeTransportCO2Impact(traceabilityData);
 
-            res.status(200).json({
-                success: true,
-                data: {
-                    traceability: traceabilityData,
-                    transportCO2Impact: transportCO2Impact,
-                },
-            });
+                // TODO : Others env impacts
+
+                res.status(200).json({
+                    success: true,
+                    data: {
+                        traceability: traceabilityData,
+                        transportCO2Impact: transportCO2Impact,
+                    },
+                });
+            } else {
+                res.status(404).json({
+                    success: false,
+                    data: "bcProductId was not found on the blockchain",
+                });
+            }
         } else {
-            console.log("BARCODE - Impact");
-            res.status(501).json({
+            res.status(400).json({
                 success: false,
-                message: "not implemented",
-                //data: user,
+                message: "bcProductId is missing",
             });
         }
     } catch (err) {
@@ -116,7 +125,10 @@ function computeTransportCO2Impact(traceabilityData) {
         lat2 = parseFloat(element.buyer.localisation.latitude);
         long2 = parseFloat(element.buyer.localisation.longitude);
         dist = getDistanceFromLatLonInKm(lat1, long1, lat1, long2);
-        impactGlobal += impactCoeff * dist;
+        let impactlocal = impactCoeff * dist;
+        impactGlobal += impactlocal;
+        element.dist = { value: dist, unit: "km" };
+        element.TransportCO2Impact = { value: impactlocal, unit: "kg(C02)/km/passenger" };
     });
     return impactGlobal;
 }
