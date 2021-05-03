@@ -246,7 +246,6 @@ exports.addToCart = async (req, res, next) => {
                 if(element.date - Date.now() < 2) {
                     if ( (req.body.bcProductAddress != undefined && element.bcProductAddress == req.body.bcProductAddress) ){
                         ItemQR = element;
-                        break;
                     } else if(element.barcode == req.body.barcode) {
                         ItemBar = element;
                     }

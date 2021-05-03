@@ -46,7 +46,7 @@ const UserSchema = new mongoose.Schema({
                 type: String,
             },
             date: {
-                type: date,
+                type: Date,
                 required: true
             },
             quantity: {
