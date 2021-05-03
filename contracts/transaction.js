@@ -24,8 +24,22 @@ module.exports = {
     },
 
     // Accept an incoming transaction
+    acceptTransaction: async function (addressTransaction, buyer) {
+        var transaction = await Transaction.at(addressTransaction);
+
+        transaction.acceptTransaction({ from: buyer.walletAddress });
+
+        return transaction;
+    },
 
     // Finish a pending transaction
+    finishTransaction: async function (addressTransaction, buyer) {
+        var transaction = await Transaction.at(addressTransaction);
+
+        transaction.finishTransaction({ from: buyer.walletAddress });
+
+        return transaction;
+    },
 };
 
 getTransactionInformation = async (transactionAddress) => {

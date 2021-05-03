@@ -32,6 +32,20 @@ const ActorSchema = new mongoose.Schema({
         type: String,
         unique: true,
     },
+    transactions: [
+        {
+            bcAddress: {
+                type: String,
+                //unique: true,
+                required: [true, "Please provide a bc address"],
+            },
+            state: {
+                type: String,
+                enum: ["created", "accepted", "finished"],
+                required: [true, "Please provide a state"],
+            },
+        },
+    ],
 });
 
 // Sign JWT and return
