@@ -7,6 +7,9 @@ const actor_artifact = require("./builds/actor.json");
 var Transaction = contract(transaction_artifact);
 var Actor = contract(actor_artifact);
 
+const ProductModel = require("../models/product");
+const mongoose = require("mongoose");
+
 // Following are functions which permit to have a JS abstract of the Smart Contract
 // and to interact with the ethereum blockchain
 // (i.e. create a new instance, deploy it, call its function, etc.)
@@ -63,22 +66,41 @@ getTransactionInformation = async (transactionAddress, depth = 0) => {
                 latitude: sellerInformations._latitude,
             },
         },
-        productsInput: transactionInformations._productsInput,
-        productsOutput: transactionInformations._productsOutput,
         transport: getTransportType(transactionInformations._transport),
         date: transactionInformations._date.toNumber(),
         isFinished: transactionInformations._isFinished,
         isAccepted: transactionInformations._isAccepted,
     };
 
+    //Find input product's name
+    for (let i = 0; i < transactionInformations._productsInput.length; i++) {
+        let product = await ProductModel.findById(
+            transactionInformations._productsInput[i].productId
+        );
+        transactionInformations._productsInput[i] = product;
+    }
+    jsonTransaction.productsInput = transactionInformations._productsInput;
+
+    //Find output product's name
+    for (let i = 0; i < transactionInformations._productsOutput.length; i++) {
+        let product = await ProductModel.findById(
+            transactionInformations._productsOutput[i].productId
+        );
+        transactionInformations._productsOutput[i] = product;
+    }
+    jsonTransaction.productsOutput = transactionInformations._productsOutput;
+
     result.push(jsonTransaction);
 
+    //Backtrack
     for (let i = 0; i < jsonTransaction.productsInput.length; i++) {
         let address = jsonTransaction.productsInput[i].addressTransaction;
         if (address !== "0x0000000000000000000000000000000000000000") {
             result = result.concat(await getTransactionInformation(address, depth + 1));
         }
     }
+
+    console;
 
     return result;
 };

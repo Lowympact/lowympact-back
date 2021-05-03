@@ -11,11 +11,16 @@ var Actor_contract = contract(Transaction_artifact); //?
 
 const ActorModel = require("../models/actor");
 const UserModel = require("../models/actor");
+const ProductModel = require("../models/product");
+
 const mongoose = require("mongoose");
 
 resetSimulation = () => {
     mongoose.connection.collections["actors"].drop((err) => {
         console.log("Actor collection dropped.");
+    });
+    mongoose.connection.collections["products"].drop((err) => {
+        console.log("Product collection dropped.");
     });
 };
 
@@ -42,6 +47,7 @@ module.exports = {
             email: "soffiatore@gmail.com",
             walletAddress: GlassMaker.newWalletAccount,
             password: "password",
+            actorContractAddress: GlassMaker.smartContractActorAddress,
         });
 
         const WallnutMaker1 = await Actor.createActor(
@@ -58,6 +64,7 @@ module.exports = {
             email: "nocciola@gmail.com",
             walletAddress: WallnutMaker1.newWalletAccount,
             password: "password",
+            actorContractAddress: WallnutMaker1.smartContractActorAddress,
         });
 
         const WallnutMaker2 = await Actor.createActor(
@@ -74,6 +81,7 @@ module.exports = {
             email: "ardeche@gmail.com",
             walletAddress: WallnutMaker2.newWalletAccount,
             password: "password",
+            actorContractAddress: WallnutMaker2.smartContractActorAddress,
         });
 
         const FerreroFactory = await Actor.createActor(
@@ -90,6 +98,7 @@ module.exports = {
             email: "factory@gmail.com",
             walletAddress: FerreroFactory.newWalletAccount,
             password: "password",
+            actorContractAddress: FerreroFactory.smartContractActorAddress,
         });
 
         const GroceryShop = await Actor.createActor(
@@ -106,18 +115,54 @@ module.exports = {
             email: "casa@gmail.com",
             walletAddress: GroceryShop.newWalletAccount,
             password: "password",
+            actorContractAddress: GroceryShop.smartContractActorAddress,
+        });
+
+        const sable = ProductModel.create({
+            _id: 1,
+            productName: "Sable",
+        });
+
+        const potEnVerre = ProductModel.create({
+            _id: 2,
+            productName: "Pot en verre",
+        });
+
+        const noisetteMadesimo = ProductModel.create({
+            _id: 3,
+            productName: "Noisettes de Madesimo",
+        });
+
+        const noisetteMadesimoConcasse = ProductModel.create({
+            _id: 4,
+            productName: "Noisettes de Madesimo concassées",
+        });
+
+        const noisetteArdeche = ProductModel.create({
+            _id: 5,
+            productName: "Noisettes d'Ardèche",
+        });
+
+        const noisetteArdecheConcasse = ProductModel.create({
+            _id: 6,
+            productName: "Noisettes d'Ardèche concassées",
+        });
+
+        const nutella = ProductModel.create({
+            _id: 7,
+            productName: "Nutella 1kg",
         });
 
         const transaction1 = await Actor.createTransaction(
             [
                 {
-                    productId: "1",
+                    productId: 1,
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
             [
                 {
-                    productId: "2",
+                    productId: 2,
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -131,13 +176,13 @@ module.exports = {
         const transaction2 = await Actor.createTransaction(
             [
                 {
-                    productId: "3",
+                    productId: 3,
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
             [
                 {
-                    productId: "4",
+                    productId: 4,
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -151,13 +196,13 @@ module.exports = {
         const transaction3 = await Actor.createTransaction(
             [
                 {
-                    productId: "5",
+                    productId: 5,
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
             [
                 {
-                    productId: "6",
+                    productId: 6,
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -171,21 +216,21 @@ module.exports = {
         const transaction4 = await Actor.createTransaction(
             [
                 {
-                    productId: "2",
+                    productId: 2,
                     addressTransaction: transaction1,
                 },
                 {
-                    productId: "4",
+                    productId: 4,
                     addressTransaction: transaction2,
                 },
                 {
-                    productId: "6",
+                    productId: 6,
                     addressTransaction: transaction3,
                 },
             ],
             [
                 {
-                    productId: "idbc", //id PotNutella QRCode
+                    productId: 7, //id PotNutella QRCode
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],

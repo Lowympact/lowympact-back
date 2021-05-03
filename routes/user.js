@@ -287,6 +287,8 @@ router.route("/history/:userId").put(checkJWT, addProductInHistory);
  *     responses:
  *       200:
  *        description: OK
+ *       400:
+ *        description: ERROR
  */
 router.route("/:userId").put(checkJWT, updateDetails);
 
