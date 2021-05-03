@@ -40,7 +40,7 @@ const router = express.Router();
  *           required: true
  *       - name: username
  *         in: body
- *         description: User ID
+ *         description: Username
  *         schema:
  *           type: string
  *           required: true
