@@ -236,36 +236,46 @@ exports.addProductInHistory = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
     try {
         if (req.jwt.id == req.params.userId) {
-            //Peut-être ObjectId(req.jwt.id)
-            const user = await User.findById(req.params.id);
+            const user = await User.findById(req.params.userId);
 
             let ItemQR;
             let ItemBar;
 
-            user.cart.forEach(element => {
-                if(element.date - Date.now() < 2) {
-                    if ( (req.body.bcProductAddress != undefined && element.bcProductAddress == req.body.bcProductAddress) ){
+            var prevdate = new Date();
+            prevdate.setHours(prevdate.getHours() - 2);
+
+            user.cart.forEach((element) => {
+                if (element.date > prevdate) {
+                    console.log(element.bcProductAddress);
+                    if (
+                        req.body.bcProductAddress != undefined &&
+                        element.bcProductAddress == req.body.bcProductAddress
+                    ) {
                         ItemQR = element;
-                    } else if(element.barcode == req.body.barcode) {
+                    } else if (element.barcode == req.body.barcode) {
                         ItemBar = element;
                     }
                 }
             });
 
             let item;
-            if (ItemQR) item = ItemQR;
-            else if (ItemBar) item = ItemBar;
-            else {
+            if (ItemQR) {
+                item = ItemQR;
+                item.quantity += 1;
+            } else if (ItemBar && !ItemBar.bcProductAddress) {
+                item = ItemBar;
+                item.quantity += 1;
+            } else {
                 item = {
-                    barcode : req.params.barcode,
-                    bcProductAddress: req.params.bcProductAddress ? req.params.bcProductAddress:undefined,
-                    date : Date.now(),
+                    barcode: req.body.barcode,
+                    bcProductAddress: req.body.bcProductAddress
+                        ? req.body.bcProductAddress
+                        : undefined,
+                    date: Date.now(),
+                    quantity: 1,
                 };
+                user.cart.push(item);
             }
-
-            item.quantity += 1;
-
-            user.cart.push(item);
 
             user.save();
 
