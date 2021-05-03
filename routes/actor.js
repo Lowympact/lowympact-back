@@ -36,6 +36,12 @@ const router = express.Router();
  *           type: string
  *           format: uuid
  *           required: true
+ *       - name: id
+ *         in: body
+ *         description: Actor's id
+ *         schema:
+ *           type: string
+ *           required: true
  *       - name: name
  *         in: body
  *         description: Actor's name
@@ -55,6 +61,26 @@ const router = express.Router();
  *         schema:
  *           type: string
  *           format: password
+ *           required: true
+ *       - name: type
+ *         in: body
+ *         description: Actor's type
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: latitude
+ *         in: body
+ *         description: Actor's latitude
+ *         schema:
+ *           type: number
+ *           format: double
+ *           required: true
+ *       - name: longitude
+ *         in: body
+ *         description: Actor's longitudes
+ *         schema:
+ *           type: number
+ *           format: double
  *           required: true
  *     responses:
  *       201:

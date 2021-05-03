@@ -28,6 +28,10 @@ const ActorSchema = new mongoose.Schema({
         minlength: 6,
         select: false, // by default, does not return the password when Actor.find({...});
     },
+    actorContractAddress: {
+        type: String,
+        unique: true,
+    },
 });
 
 // Sign JWT and return
