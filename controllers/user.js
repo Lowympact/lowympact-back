@@ -212,8 +212,25 @@ exports.addProductInHistory = async (req, res, next) => {
                 data.bcProductAddress = req.body.bcProductAddress;
             }
 
-            // Add product in user history
-            user.history.push(data);
+            // Check the presence of the same product in history
+            let previousMatchingProduct;
+            if (req.body.bcProductAddress) {
+                previousMatchingProduct = user.history.find(
+                    (t) => t.barcode == data.barcode && t.bcProductAddress == data.bcProductAddress
+                );
+            } else {
+                previousMatchingProduct = user.history.find(
+                    (t) => t.barcode == data.barcode && !t.bcProductAddress
+                );
+            }
+
+            if (previousMatchingProduct) {
+                // Update product's date
+                previousMatchingProduct.insertAt = Date.now();
+            } else {
+                // Add product in user history
+                user.history.push(data);
+            }
 
             user.save();
 
