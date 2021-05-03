@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema({
             bcProductAddress: {
                 type: String,
             },
+            insertAt: {
+                type: Date,
+                default: Date.now(),
+            },
         },
     ],
     cart: [
