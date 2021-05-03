@@ -33,7 +33,7 @@ Transaction.init();
 connectDB();
 
 // Launch simulation
-simulation.main();
+//simulation.main();
 
 // Import routes files
 const userRouter = require("./routes/user");
