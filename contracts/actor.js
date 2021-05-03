@@ -14,7 +14,6 @@ module.exports = {
     },
     // Create a new actor on the bc
     createActor: async function (id, name, actorType, latitude, longitude, password) {
-        //TODO : update these lines when wallet creation will be implemented
         // Create a wallet account for the client (needs to be stored in MongoDB)
         var newWalletAccount = await web3.eth.personal.newAccount(password);
         web3.eth.personal.unlockAccount(newWalletAccount, password, 600);
