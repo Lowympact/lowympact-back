@@ -180,7 +180,7 @@ module.exports = {
             ],
             [
                 {
-                    productId: "3017620425035", //id PotNutella Code barre
+                    productId: "idbc", //id PotNutella QRCode
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
