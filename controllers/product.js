@@ -27,63 +27,7 @@ exports.getProduct = async (req, res, next) => {
             }
 
             // Blockchain's Traceability
-            //let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
-            let traceabilityData = [
-                {
-                    id: "transaction2",
-                    buyer: {
-                        id: "CAR-69000",
-                        name: "Carrefour Lyon Part Dieu",
-                        type: "maker",
-                        localisation: {
-                            longitude: "4.857217",
-                            latitude: "45.761467",
-                        },
-                    },
-                    seller: {
-                        id: "BAR-85025 ",
-                        name: "Barilla Protenza",
-                        type: "producer",
-                        localisation: {
-                            longitude: "15.7028457",
-                            latitude: "41.0728191",
-                        },
-                    },
-                    productsInput: [[Array]],
-                    productsOutput: [[Array]],
-                    transport: "Charette",
-                    date: 1619794500,
-                    isFinished: false,
-                    isAccepted: false,
-                },
-                {
-                    id: "transaction1",
-                    buyer: {
-                        id: "CAR-69000",
-                        name: "Carrefour Lyon Part Dieu",
-                        type: "maker",
-                        localisation: {
-                            longitude: "4.857217",
-                            latitude: "45.761467",
-                        },
-                    },
-                    seller: {
-                        id: "CAR-69100",
-                        name: "Carrefour Villeurbanne",
-                        type: "maker",
-                        localisation: {
-                            longitude: "4.88037",
-                            latitude: "45.76478",
-                        },
-                    },
-                    productsInput: [[Array]],
-                    productsOutput: [[Array]],
-                    transport: "Train",
-                    date: 1619794499,
-                    isFinished: false,
-                    isAccepted: false,
-                },
-            ];
+            let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
 
             // Fill the traceability with reverse geocoding
             await reverseGeocodingOnTraceability(traceabilityData);
