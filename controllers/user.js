@@ -204,11 +204,16 @@ exports.addProductInHistory = async (req, res, next) => {
         if (userId == req.params.userId) {
             const user = await User.findById(userId);
 
-            // Add product in user history
-            user.history.push({
+            let data = {
                 barcode: req.body.barcode,
-                bcProductAddress: req.body.bcProductAddress,
-            });
+            };
+
+            if (req.body.bcProductAddress) {
+                data.bcProductAddress = req.body.bcProductAddress;
+            }
+
+            // Add product in user history
+            user.history.push(data);
 
             user.save();
 
