@@ -156,13 +156,13 @@ module.exports = {
         const transaction1 = await Actor.createTransaction(
             [
                 {
-                    productId: 1,
+                    productId: "1",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
             [
                 {
-                    productId: 2,
+                    productId: "2",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -176,13 +176,13 @@ module.exports = {
         const transaction2 = await Actor.createTransaction(
             [
                 {
-                    productId: 3,
+                    productId: "3",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
             [
                 {
-                    productId: 4,
+                    productId: "4",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -196,13 +196,13 @@ module.exports = {
         const transaction3 = await Actor.createTransaction(
             [
                 {
-                    productId: 5,
+                    productId: "5",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
             [
                 {
-                    productId: 6,
+                    productId: "6",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -216,21 +216,21 @@ module.exports = {
         const transaction4 = await Actor.createTransaction(
             [
                 {
-                    productId: 2,
+                    productId: "2",
                     addressTransaction: transaction1,
                 },
                 {
-                    productId: 4,
+                    productId: "4",
                     addressTransaction: transaction2,
                 },
                 {
-                    productId: 6,
+                    productId: "6",
                     addressTransaction: transaction3,
                 },
             ],
             [
                 {
-                    productId: 7, //id PotNutella QRCode
+                    productId: "7",
                     addressTransaction: "0x0000000000000000000000000000000000000000",
                 },
             ],
@@ -244,10 +244,6 @@ module.exports = {
         //Front export
         console.log("Export mockTransactionFront");
         module.exports.mockTransactionFront = transaction4;
-
-        const productHistory = await Transaction.getProductHistory(transaction4);
-
-        console.log(productHistory);
     },
 
     mockTransactionFront: null,
