@@ -5,6 +5,9 @@ const actor_artifact = require("./builds/actor.json");
 
 Actor = contract(actor_artifact);
 
+const ProductModel = require("../models/product");
+const mongoose = require("mongoose");
+
 // Following are functions which permit to have a JS abstract of the Smart Contract
 // and to interact with the ethereum blockchain
 // (i.e. create a new instance, deploy it, call its function, etc.)
@@ -62,6 +65,15 @@ module.exports = {
             { from: actorWallet } // Use the wallet address of the seller
         );
 
+        for (let i = 0; i < productsOutput.length; i++) {
+            updateTransactionAddress(productsOutput[i].productId, ans.logs[0].args._address);
+        }
+
         return ans.logs[0].args._address;
     },
 };
+
+//Private function
+async function updateTransactionAddress(productId, address) {
+    await ProductModel.findByIdAndUpdate({ _id: productId }, { transactionAddress: address });
+}
