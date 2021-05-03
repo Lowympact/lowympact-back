@@ -1,6 +1,7 @@
 const Actor = require("../models/actor");
 const { sendJWT } = require("../util/sendJWT");
 const { hashPassword } = require("../middleware/hashPassword");
+const ActorContract = require("../contracts/actor");
 
 /*  GET */
 
@@ -53,20 +54,20 @@ exports.loginActor = async (req, res, next) => {
 
 exports.registerActor = async (req, res, next) => {
     try {
-        // Create the new wallet account
-        var newWalletAccount = await web3.eth.personal.newAccount(req.body.password);
-
+        // Create the actor (blockchain)
         // POC : Need some ether from a Ganache created account
-        web3.eth.personal.unlockAccount(newWalletAccount, req.body.password, 600);
-        const accounts = await web3.eth.getAccounts();
-        const amount = web3.utils.toWei("1", "ether");
-        web3.eth.sendTransaction({
-            from: accounts[0],
-            to: newWalletAccount,
-            value: amount,
-        });
+        let newActorContract = await ActorContract.createActor(
+            req.body.id,
+            req.body.name,
+            req.body.type,
+            req.body.latitude,
+            req.body.longitude,
+            req.body.password
+        );
 
-        req.body.walletAddress = newWalletAccount;
+        req.body.actorContractAddress = newActorContract.smartContractActorAddress;
+
+        req.body.walletAddress = newActorContract.newWalletAccount;
 
         // create a user a new actor
         req.body.password = hashPassword(req.body.password);

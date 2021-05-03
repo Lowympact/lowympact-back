@@ -33,7 +33,8 @@ module.exports = {
             "Murano Soffiatore di Vetro",
             "maker",
             "45.458986",
-            "12.352345"
+            "12.352345",
+            "password"
         );
 
         const GlassMakerModel = ActorModel.create({
@@ -48,7 +49,8 @@ module.exports = {
             "Nocciola produttore di Madesimo",
             "productor",
             "46.43669",
-            "9.358031"
+            "9.358031",
+            "password"
         );
 
         const WallnutMaker1Model = ActorModel.create({
@@ -63,7 +65,8 @@ module.exports = {
             "Noisettes d'Ardèche",
             "productor",
             "44.407452",
-            "4.395401"
+            "4.395401",
+            "password"
         );
 
         const WallnutMaker2Model = ActorModel.create({
@@ -78,7 +81,8 @@ module.exports = {
             "Ferrero Factory Milano",
             "maker",
             "45.4654219",
-            "9.1859243"
+            "9.1859243",
+            "password"
         );
 
         const FerreroFactoryModel = ActorModel.create({
@@ -93,7 +97,8 @@ module.exports = {
             "Alla Casa",
             "shop",
             "45.4408474",
-            "12.3155151"
+            "12.3155151",
+            "password"
         );
 
         const GroceryShopModel = ActorModel.create({
