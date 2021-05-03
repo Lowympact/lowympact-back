@@ -13,6 +13,8 @@ const ActorModel = require("../models/actor");
 const UserModel = require("../models/actor");
 const mongoose = require("mongoose");
 
+const { hashPassword } = require("../middleware/hashPassword");
+
 resetSimulation = () => {
     mongoose.connection.collections["actors"].drop((err) => {
         console.log("Actor collection dropped.");
@@ -28,21 +30,26 @@ module.exports = {
         // At the beginning of the simulation, reset all MongoDB data
         resetSimulation();
 
+        let passwordGlassMaker = hashPassword("password");
+
         const GlassMaker = await Actor.createActor(
             "GLAS-85025",
             "Murano Soffiatore di Vetro",
             "maker",
             "45.458986",
             "12.352345",
-            "password"
+            passwordGlassMaker
         );
 
         const GlassMakerModel = ActorModel.create({
             name: "Murano Soffiatore di Vetro",
             email: "soffiatore@gmail.com",
             walletAddress: GlassMaker.newWalletAccount,
-            password: "password",
+            password: passwordGlassMaker,
+            actorContractAddress: GlassMaker.smartContractActorAddress,
         });
+
+        let passwordWallnutMaker1 = hashPassword("password");
 
         const WallnutMaker1 = await Actor.createActor(
             "WALL-16872",
@@ -50,15 +57,18 @@ module.exports = {
             "productor",
             "46.43669",
             "9.358031",
-            "password"
+            passwordWallnutMaker1
         );
 
         const WallnutMaker1Model = ActorModel.create({
             name: "Nocciola produttore di Madesimo",
             email: "nocciola@gmail.com",
             walletAddress: WallnutMaker1.newWalletAccount,
-            password: "password",
+            password: passwordWallnutMaker1,
+            actorContractAddress: WallnutMaker1.smartContractActorAddress,
         });
+
+        let passwordWallnutMaker2 = hashPassword("password");
 
         const WallnutMaker2 = await Actor.createActor(
             "WAL2-37919",
@@ -66,15 +76,18 @@ module.exports = {
             "productor",
             "44.407452",
             "4.395401",
-            "password"
+            passwordWallnutMaker2
         );
 
         const WallnutMaker2Model = ActorModel.create({
             name: "Noisettes d'Ardèche",
             email: "ardeche@gmail.com",
             walletAddress: WallnutMaker2.newWalletAccount,
-            password: "password",
+            password: passwordWallnutMaker2,
+            actorContractAddress: WallnutMaker2.smartContractActorAddress,
         });
+
+        let passwordFerreroFactory = hashPassword("password");
 
         const FerreroFactory = await Actor.createActor(
             "FERR-36189",
@@ -82,15 +95,18 @@ module.exports = {
             "maker",
             "45.4654219",
             "9.1859243",
-            "password"
+            passwordFerreroFactory
         );
 
         const FerreroFactoryModel = ActorModel.create({
             name: "Ferrero Factory Milano",
             email: "factory@gmail.com",
             walletAddress: FerreroFactory.newWalletAccount,
-            password: "password",
+            password: passwordFerreroFactory,
+            actorContractAddress: FerreroFactory.smartContractActorAddress,
         });
+
+        let passwordGroceryShop = hashPassword("password");
 
         const GroceryShop = await Actor.createActor(
             "SHOP-36189",
@@ -98,14 +114,15 @@ module.exports = {
             "shop",
             "45.4408474",
             "12.3155151",
-            "password"
+            passwordGroceryShop
         );
 
         const GroceryShopModel = ActorModel.create({
             name: "Alla Casa",
             email: "casa@gmail.com",
             walletAddress: GroceryShop.newWalletAccount,
-            password: "password",
+            password: passwordGroceryShop,
+            actorContractAddress: GroceryShop.smartContractActorAddress,
         });
 
         const transaction1 = await Actor.createTransaction(
