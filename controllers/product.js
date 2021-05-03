@@ -22,9 +22,9 @@ exports.getProduct = async (req, res, next) => {
             console.log("QRCODE - Traçabilité");
 
             // Mock Front
-            //if (req.query.bcProductId == "idbc") {
-            //req.query.bcProductId = simulation.mockTransactionFront;
-            //}
+            if (req.query.bcProductId == "idbc") {
+                req.query.bcProductId = simulation.mockTransactionFront;
+            }
 
             // Blockchain's Traceability
             let traceabilityData = await Transaction.getProductHistory(req.query.bcProductId);
