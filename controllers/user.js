@@ -80,6 +80,61 @@ exports.getUserHistory = async (req, res, next) => {
     }
 };
 
+exports.itemCurrentCart = async (req, res, next) => {
+    try {
+        if (req.jwt.id != req.params.userId) {
+            // An user try to modify the history of another user
+            res.status(401).json({
+                message: "You're not authorized to access this route",
+            });
+        }
+
+        const user = await User.findById(req.params.userId);
+
+        var prevdate = new Date();
+        prevdate.setHours(prevdate.getHours() - 2);
+
+        let item;
+        for (i = 0; i < user.cart.length; i++) {
+            element = user.cart[i];
+            if (element.date > prevdate) {
+                if (
+                    req.query.bcProductAddress != undefined &&
+                    element.bcProductAddress == req.query.bcProductAddress
+                ) {
+                    item = element;
+                    break;
+                } else if (
+                    element.barcode == req.params.barcode &&
+                    req.query.bcProductAddress == undefined &&
+                    element.bcProductAddress == undefined
+                ) {
+                    item = element;
+                    break;
+                }
+            }
+        }
+
+        if (!item) {
+            res.status(200).json({
+                success: true,
+                data: {
+                    barcode: req.params.barcode,
+                    bcProductAddress: req.query.bcProductAddress,
+                    quantity: 0,
+                },
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: item,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 /*  POST */
 
 exports.register = async (req, res, next) => {
@@ -250,51 +305,81 @@ exports.addProductInHistory = async (req, res, next) => {
     }
 };
 
-exports.addToCart = async (req, res, next) => {
+exports.updateCart = async (req, res, next) => {
     try {
         if (req.jwt.id == req.params.userId) {
             const user = await User.findById(req.params.userId);
 
-            let ItemQR;
-            let ItemBar;
+            if (req.body.quantityDelta == undefined || typeof req.body.quantityDelta == "string") {
+                res.status(401).json({
+                    message: "You have to choose a quantityDelta",
+                });
+            }
+
+            //req.body.quantityDelta = Number(req.body.quantityDelta);
 
             var prevdate = new Date();
             prevdate.setHours(prevdate.getHours() - 2);
 
-            user.cart.forEach((element) => {
+            let item;
+            let itemIndex;
+            for (i = 0; i < user.cart.length; i++) {
+                element = user.cart[i];
                 if (element.date > prevdate) {
-                    console.log(element.bcProductAddress);
                     if (
                         req.body.bcProductAddress != undefined &&
                         element.bcProductAddress == req.body.bcProductAddress
                     ) {
-                        ItemQR = element;
-                    } else if (element.barcode == req.body.barcode) {
-                        ItemBar = element;
+                        item = element;
+                        itemIndex = i;
+                        break;
+                    } else if (
+                        element.barcode == req.body.barcode &&
+                        req.body.bcProductAddress == undefined &&
+                        element.bcProductAddress == undefined
+                    ) {
+                        item = element;
+                        itemIndex = i;
+                        break;
                     }
                 }
-            });
-
-            let item;
-            if (ItemQR) {
-                item = ItemQR;
-                item.quantity += 1;
-            } else if (ItemBar && !ItemBar.bcProductAddress) {
-                item = ItemBar;
-                item.quantity += 1;
-            } else {
-                item = {
-                    barcode: req.body.barcode,
-                    bcProductAddress: req.body.bcProductAddress
-                        ? req.body.bcProductAddress
-                        : undefined,
-                    date: Date.now(),
-                    quantity: 1,
-                };
-                user.cart.push(item);
             }
 
-            user.save();
+            if (!item) {
+                //create a new item
+                if (req.body.quantityDelta >= 1) {
+                    item = {
+                        barcode: req.body.barcode,
+                        bcProductAddress: req.body.bcProductAddress
+                            ? req.body.bcProductAddress
+                            : undefined,
+                        date: Date.now(),
+                        quantity: req.body.quantityDelta,
+                    };
+                    user.cart.push(item);
+
+                    User.create(user);
+                } else {
+                    res.status(400).json({
+                        message: "You can't set a negative quantity for a new item",
+                    });
+                }
+            } else {
+                if (req.body.quantityDelta + item.quantity < 0) {
+                    res.status(400).json({
+                        message: "You can't remove more product than there are in the cart",
+                    });
+                } else {
+                    if (item.quantity + req.body.quantityDelta <= 0) {
+                        // delete the item
+                        user.cart.splice(itemIndex, 1);
+                    } else {
+                        // update the item's quantity
+                        item.quantity += req.body.quantityDelta;
+                    }
+                    user.save();
+                }
+            }
 
             res.status(200).json({
                 success: true,

@@ -1,6 +1,5 @@
 const express = require("express");
 
-// const paginationFiltering = require("../middleware/paginationFiltering");
 const { checkApiKey } = require("../middleware/apiKey");
 const { checkJWT } = require("../middleware/checkJWT");
 
@@ -13,7 +12,8 @@ const {
     forgotPassword,
     deleteUser,
     addProductInHistory,
-    addToCart,
+    updateCart,
+    itemCurrentCart,
 } = require("../controllers/user");
 
 const router = express.Router();
@@ -74,7 +74,7 @@ router.route("/").post(register);
  *     summary: Login a user
  *     tags:
  *       - users
- *     description: Signin a user in the application and get the JWT Token for cookies
+ *     description: Signin a user in the application and get the JWT for cookies
  *     produces:
  *       - application/json
  *     parameters:
@@ -170,7 +170,7 @@ router.route("/:userId").get(checkJWT, getUser);
  *           required: true
  *       - name: authorization
  *         in: header
- *         description: JWT Token for the user's session (can be stored in cookies)
+ *         description: JWT for the user's session (can be stored in cookies)
  *         schema:
  *           type: string
  *           format: uuid
@@ -212,7 +212,7 @@ router.route("/:userId/history").get(checkJWT, getUserHistory);
  *           required: true
  *       - name: authorization
  *         in: header
- *         description: JWT Token for the user's session (can be stored in cookies)
+ *         description: JWT for the user's session (can be stored in cookies)
  *         schema:
  *           type: string
  *           format: uuid
@@ -249,13 +249,13 @@ router.route("/:userId/history").put(checkJWT, addProductInHistory);
  * @swagger
  * /users/{userId}/cart:
  *   put:
- *     summary: Add a product in user's history
+ *     summary: Add a quantity of a product in user's cart
  *     tags:
  *       - users
  *     description: >
- *       Add the barcode and the blockchain address (if it exists) of
- *       the product in user's history. This route is protected and
- *       need the user to be auth.
+ *       Add more or less of a quantity of a product in the user's cart.
+ *       The quantity is set in the quantityDelta variable. Use positiv value increase the quantity, and negativ to decrease it.
+ *       If the quantityDelta is less than the quantity of the product, an error is send.
  *     produces:
  *       - application/json
  *     parameters:
@@ -268,7 +268,7 @@ router.route("/:userId/history").put(checkJWT, addProductInHistory);
  *           required: true
  *       - name: authorization
  *         in: header
- *         description: JWT Token for the user's session (can be stored in cookies)
+ *         description: JWT for the user's session (can be stored in cookies)
  *         schema:
  *           type: string
  *           format: uuid
@@ -299,7 +299,59 @@ router.route("/:userId/history").put(checkJWT, addProductInHistory);
  *       404:
  *         description: A user with the specified ID was not found.
  */
- router.route("/:userId/cart").put(checkJWT, addToCart);
+router.route("/:userId/cart").put(checkJWT, updateCart);
+
+/**
+ * @swagger
+ * /users/{userId}/cart/{barcode}:
+ *   get:
+ *     summary: Get the actual item in the cart
+ *     tags:
+ *       - users
+ *     description: >
+ *       The actual quantity of the wanted item previously added into the cart, within a span time of two hours.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: api-key
+ *         in: header
+ *         description: API-Key
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: true
+ *       - name: authorization
+ *         in: header
+ *         description: JWT for the user's session (can be stored in cookies)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: false
+ *       - name: userId
+ *         in: path
+ *         description: User identifier
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: barcode
+ *         in: path
+ *         description: Product barcode
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: bcProductAddress
+ *         in: query
+ *         description: Product traceability identifier
+ *         schema:
+ *           type: string
+ *           required: false
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: A user with the specified ID was not found.
+ */
+router.route("/:userId/cart/:barcode").get(checkJWT, itemCurrentCart);
 
 /**
  * @swagger
