@@ -51,14 +51,23 @@ const UserSchema = new mongoose.Schema({
             },
             date: {
                 type: Date,
-                required: true
+                required: true,
             },
             quantity: {
                 type: Number,
                 default: 0,
             },
-        }
-    ]
+            carbonImpact: {
+                type: Number,
+                required: true,
+            },
+            ecoscore: {
+                type: String,
+                enum: ["a", "b", "c", "d", "e", "unknown"],
+                required: [true, "Please provide an ecoscore"],
+            },
+        },
+    ],
 });
 
 //Sign JWT and return

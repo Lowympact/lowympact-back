@@ -14,6 +14,7 @@ const {
     addProductInHistory,
     updateCart,
     itemCurrentCart,
+    getUserStatistics,
 } = require("../controllers/user");
 
 const router = express.Router();
@@ -291,6 +292,19 @@ router.route("/:userId/history").put(checkJWT, addProductInHistory);
  *         schema:
  *           type: string
  *           required: false
+ *       - name: ecoscore
+ *         in: body
+ *         description: Ecoscore of the product
+ *         schema:
+ *           type: string
+ *           enum: [a, b, c, d, e, unknown]
+ *           required: true
+ *       - name: impactCarbon
+ *         in: body
+ *         description: Carbon Impact of the product
+ *         schema:
+ *           type: number
+ *           required: true
  *     responses:
  *       200:
  *         description: OK
@@ -459,5 +473,52 @@ router.route("/:userId").delete(checkJWT, deleteUser);
  *         description: A user with the specified ID was not found.
  */
 //router.route("/forgot-password").get(forgotPassword);
+
+/**
+ * @swagger
+ * /users/{userId}/statistics:
+ *   get:
+ *     summary: Get the statistics of a user.
+ *     tags:
+ *       - users
+ *     description: Get the statistics of the user. We can specify if we want the ecoscore or the carbon impact
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: api-key
+ *         in: header
+ *         description: API-Key
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: true
+ *       - name: userId
+ *         in: path
+ *         description: User Id
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: typeStatistic
+ *         in: query
+ *         description: Type of the statistic
+ *         schema:
+ *           type: string
+ *           required: true
+ *           enum: [ecoscore, impactCarbon]
+ *       - name: typeAggregate
+ *         in: query
+ *         description: Type of the aggregation
+ *         schema:
+ *           type: string
+ *           required: false
+ *     responses:
+ *       200:
+ *         description: OK
+ *       400:
+ *         description: Unknown type of statistic or aggregate
+ *       401:
+ *         description: A user try to access to the statistics of another user
+ */
+router.route("/:userId/statistics").get(checkJWT, getUserStatistics);
 
 module.exports = router;

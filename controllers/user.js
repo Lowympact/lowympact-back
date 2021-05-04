@@ -15,9 +15,14 @@ exports.getUser = async (req, res, next) => {
                 success: true,
                 data: user,
             });
+            next();
         } else {
             // A user try to access to another user
-            console.log("You're not authorized to access this route");
+            res.status(401).json({
+                success: false,
+                message: "You're not authorized to access this route",
+            });
+            next();
         }
     } catch (error) {
         next(error);
@@ -40,7 +45,6 @@ exports.getUserHistory = async (req, res, next) => {
                             method: "GET",
                             url: `https://world.openfoodfacts.org/api/v0/product/${p.barcode}.json/`,
                         });
-                        console.log(apiRes);
 
                         return {
                             id: p._id,
@@ -62,18 +66,21 @@ exports.getUserHistory = async (req, res, next) => {
                     success: true,
                     data: response,
                 });
+                next();
             } else {
                 res.status(200).json({
                     success: true,
                     data: [],
                 });
+                next();
             }
         } else {
             // A user try to access to another user
-            console.log("You're not authorized to access this route");
+
             res.status(401).json({
                 message: "You're not authorized to access this route",
             });
+            next();
         }
     } catch (error) {
         next(error);
@@ -87,6 +94,7 @@ exports.itemCurrentCart = async (req, res, next) => {
             res.status(401).json({
                 message: "You're not authorized to access this route",
             });
+            next();
         }
 
         const user = await User.findById(req.params.userId);
@@ -124,12 +132,143 @@ exports.itemCurrentCart = async (req, res, next) => {
                     quantity: 0,
                 },
             });
+            next();
         }
 
         res.status(200).json({
             success: true,
             data: item,
         });
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getUserStatistics = async (req, res, next) => {
+    try {
+        const userId = req.jwt.id;
+        if (userId == req.params.userId) {
+            const user = await User.findById(userId);
+
+            const typeAggregate = req.query.typeAggregate;
+
+            const typeStatistic = req.query.typeStatistic;
+
+            let statistics;
+
+            if (typeStatistic == "ecoscore") {
+                statistics = {
+                    ecoscore: {
+                        a: 0,
+                        b: 0,
+                        c: 0,
+                        d: 0,
+                        e: 0,
+                        unknown: 0,
+                    },
+                };
+
+                user.cart.forEach((el) => {
+                    statistics.ecoscore[el.ecoscore] += el.quantity;
+                });
+            } else if (typeStatistic == "carbonImpact") {
+                statistics = {
+                    carbonImpact: {},
+                };
+                let dateIntervalStep;
+                let now = Date.now();
+                switch (typeAggregate) {
+                    case "fromBeginning":
+                        dateIntervalStep = Math.floor((now - user.createdAt) / (1000 * 3600 * 24));
+                        if (dateIntervalStep < 30) {
+                            // weekly
+                            dateIntervalStep = 1000 * 3600 * 24 * 7;
+                            statistics.carbonImpact.data = Array(
+                                Math.floor((now - user.createdAt) / (1000 * 3600 * 24 * 7) + 1)
+                            );
+                            statistics.carbonImpact.unit = "weekly";
+                        } else if (dateIntervalStep < 365) {
+                            // monthly
+                            dateIntervalStep = 1000 * 3600 * 24 * 30;
+                            statistics.carbonImpact.data = Array(
+                                Math.floor((now - user.createdAt) / (1000 * 3600 * 24 * 30) + 1)
+                            );
+                            statistics.carbonImpact.unit = "monthly";
+                        } else {
+                            // yearly
+                            dateIntervalStep = 1000 * 3600 * 24 * 365;
+                            statistics.carbonImpact.data = Array(
+                                Math.floor((now - user.createdAt) / (1000 * 3600 * 24 * 365) + 1)
+                            );
+                            statistics.carbonImpact.unit = "yearly";
+                        }
+                        break;
+                    case "yearly":
+                        dateIntervalStep = 1000 * 3600 * 24 * 365;
+                        statistics.carbonImpact.data = Array(
+                            Math.floor((now - user.createdAt) / (1000 * 3600 * 24 * 365) + 1)
+                        );
+                        statistics.carbonImpact.unit = "yearly";
+                        break;
+                    case "monthly":
+                        dateIntervalStep = 1000 * 3600 * 24 * 30;
+                        statistics.carbonImpact.data = Array(12);
+                        statistics.carbonImpact.unit = "monthly";
+                        break;
+                    case "weekly":
+                        dateIntervalStep = 1000 * 3600 * 24 * 7;
+                        statistics.carbonImpact.data = Array(6);
+                        statistics.carbonImpact.unit = "weekly";
+                        break;
+                    default:
+                        res.status(400).json({
+                            success: false,
+                            message: "Unknown or undefined type of agregate (typeAggregate)",
+                        });
+                        next();
+                        break;
+                }
+
+                for (let i = 0; i < statistics.carbonImpact.data.length; i++) {
+                    statistics.carbonImpact.data[i] = {
+                        offset: -i,
+                        impact: 0,
+                        nbProducts: 0,
+                        nbProductUnknow: 0,
+                    };
+                }
+
+                user.cart.forEach((el) => {
+                    let index = Math.floor((now - el.date) / dateIntervalStep);
+                    if (index < statistics.carbonImpact.data.length && el.carbonImpact >= 0) {
+                        statistics.carbonImpact.data[index].nbProducts += el.quantity;
+                        statistics.carbonImpact.data[index].impact += el.quantity * el.carbonImpact;
+                    } else if (index < statistics.carbonImpact.data.length) {
+                        statistics.carbonImpact.data[index].nbProductUnknow += el.quantity;
+                    }
+                });
+            } else {
+                res.status(400).json({
+                    success: false,
+                    message: "Unknown or undefined type of statistics (typeStatistic)",
+                });
+                next();
+            }
+
+            res.status(200).json({
+                success: true,
+                statistics: statistics,
+            });
+            next();
+        } else {
+            // A user try to access to another user
+            res.status(401).json({
+                success: false,
+                message: "You're not authorized to access this route",
+            });
+            next();
+        }
     } catch (error) {
         next(error);
     }
@@ -220,9 +359,14 @@ exports.updateDetails = async (req, res, next) => {
                 success: true,
                 data: user,
             });
+            next();
         } else {
             // A user try to modify another user
-            console.log("You're not authorized to access this route");
+            res.status(401).json({
+                success: false,
+                message: "You're not authorized to access this route",
+            });
+            next();
         }
     } catch (error) {
         next(error);
@@ -251,6 +395,7 @@ const sendTokenResponse = (user, statusCode, res) => {
             token,
             _id: user._id,
         });
+    next();
 };
 
 exports.addProductInHistory = async (req, res, next) => {
@@ -294,11 +439,13 @@ exports.addProductInHistory = async (req, res, next) => {
                 success: true,
                 data: user,
             });
+            next();
         } else {
             // A user try to modify the history of another user
             res.status(401).json({
                 message: "You're not authorized to access this route",
             });
+            next();
         }
     } catch (error) {
         next(error);
@@ -311,9 +458,24 @@ exports.updateCart = async (req, res, next) => {
             const user = await User.findById(req.params.userId);
 
             if (req.body.quantityDelta == undefined || typeof req.body.quantityDelta == "string") {
-                res.status(401).json({
+                res.status(400).json({
                     message: "You have to choose a quantityDelta",
                 });
+                next();
+            }
+
+            if (req.body.ecoscore == undefined) {
+                res.status(400).json({
+                    message: "You have to specify the ecoscore",
+                });
+                next();
+            }
+
+            if (req.body.carbonImpact == undefined || typeof req.body.carbonImpact == "string") {
+                res.status(400).json({
+                    message: "You have to specify the carbon impact",
+                });
+                next();
             }
 
             //req.body.quantityDelta = Number(req.body.quantityDelta);
@@ -355,20 +517,24 @@ exports.updateCart = async (req, res, next) => {
                             : undefined,
                         date: Date.now(),
                         quantity: req.body.quantityDelta,
+                        ecoscore: req.body.ecoscore,
+                        carbonImpact: req.body.carbonImpact,
                     };
                     user.cart.push(item);
 
-                    User.create(user);
+                    user.save();
                 } else {
                     res.status(400).json({
                         message: "You can't set a negative quantity for a new item",
                     });
+                    next();
                 }
             } else {
                 if (req.body.quantityDelta + item.quantity < 0) {
                     res.status(400).json({
                         message: "You can't remove more product than there are in the cart",
                     });
+                    next();
                 } else {
                     if (item.quantity + req.body.quantityDelta <= 0) {
                         // delete the item
@@ -377,6 +543,7 @@ exports.updateCart = async (req, res, next) => {
                         // update the item's quantity
                         item.quantity += req.body.quantityDelta;
                     }
+
                     user.save();
                 }
             }
@@ -385,11 +552,13 @@ exports.updateCart = async (req, res, next) => {
                 success: true,
                 data: user,
             });
+            next();
         } else {
             // An user try to modify the history of another user
             res.status(401).json({
                 message: "You're not authorized to access this route",
             });
+            next();
         }
     } catch (error) {
         next(error);
@@ -412,9 +581,14 @@ exports.deleteUser = async (req, res, next) => {
             res.status(200).json({
                 success: true,
             });
+            next();
         } else {
             // A user try to delete another user
-            console.log("You're not authorized to access this route");
+            res.status(401).json({
+                success: false,
+                message: "You're not authorized to access this route",
+            });
+            next();
         }
     } catch (error) {
         next(error);
