@@ -1,0 +1,355 @@
+{
+    "actor": [
+        {
+            "id": "CARF-4578",
+            "name": "Carrefour Villeurbanne",
+            "type": "shop",
+            "latitude": "45.77729049957016",
+            "longitude": "4.874489068612396",
+            "password": "passcarrefour",
+            "email": "carrefour@carrefour.com"
+        },
+        {
+            "id": "FERR-36189",
+            "name": "Ferrero Factory Milano",
+            "type": "maker",
+            "latitude": "45.4654219",
+            "longitude": "9.1859243",
+            "password": "passferrero",
+            "email": "ferrero@ferrero.com"
+        },
+        {
+            "id": "SANMAK-78541",
+            "name": "Sand productor Alger",
+            "type": "productor",
+            "latitude": "36.73406883301471",
+            "longitude": "3.08642622304751",
+            "password": "passsanmakalger",
+            "email": "sanmakalger@sanmakalger.com"
+        },
+        {
+            "id": "GLAMAK-54512",
+            "name": "Usine de verre, Marseille",
+            "type": "maker",
+            "latitude": "43.31470672966511",
+            "longitude": "5.361335065520701",
+            "password": "passglamakmars",
+            "email": "glamakmars@glamakmars.com"
+        },
+        {
+            "id": "PALM-5122",
+            "name": "Palm oil production company",
+            "type": "productor",
+            "latitude": "-12.145927602435664",
+            "longitude": "-44.997984139922224",
+            "password": "passpalmoil",
+            "email": "palmoil@palmoil.com"
+        },
+        {
+            "id": "Walnut-74521",
+            "name": "Walnut productor Kayseri",
+            "type": "productor",
+            "latitude": "38.706701828697334",
+            "longitude": "35.494326637103896",
+            "password": "passwalnutkay",
+            "email": "walnutkay@walnutkay.com"
+        },
+        {
+            "id": "MilkProd-1478",
+            "name": "Milk productor Belgium",
+            "type": "productor",
+            "latitude": "50.87485828769055",
+            "longitude": "4.307747257244137",
+            "password": "passmilkbelgium",
+            "email": "milkbelgium@milkbelgium.com"
+        },
+        {
+            "id": "CocoaPodProd-9874",
+            "name": "Cocoa Pod Productor, Abuja",
+            "type": "productor",
+            "latitude": "9.078039488275245",
+            "longitude": "7.406017975040401",
+            "password": "passcocoapod",
+            "email": "cocoapod@cocoapod.com"
+        },
+        {
+            "id": "CocoaBeanMaker-46514",
+            "name": "Cocoa bean industry Germany",
+            "type": "maker",
+            "latitude": "50.823780213520585",
+            "longitude": "9.025837771293988",
+            "password": "passcocoabean",
+            "email": "cocoabean@cocoabean.com"
+        },
+        {
+            "id": "FRASUGAR-123",
+            "name": "Producteur de sucre Made In France",
+            "type": "productor",
+            "latitude": "49.83716041727287",
+            "longitude": "3.4893986250979423",
+            "password": "passsugar",
+            "email": "FRASUGAR@FRASUGAR.com"
+        }
+    ],
+    "products": [
+        {
+            "id": 1,
+            "name": "Sable"
+        },
+        {
+            "id": 2,
+            "name": "Pot en verre"
+        },
+        {
+            "id": 3,
+            "name": "Fruit du palmier à huile"
+        },
+        {
+            "id": 4,
+            "name": "Huile de palme"
+        },
+        {
+            "id": 5,
+            "name": "Noisettes"
+        },
+        {
+            "id": 6,
+            "name": "Noisettes concassées"
+        },
+        {
+            "id": 7,
+            "name": "Lait"
+        },
+        {
+            "id": 8,
+            "name": "Lait écrémé en poudre"
+        },
+        {
+            "id": 9,
+            "name": "Cabosse"
+        },
+        {
+            "id": 10,
+            "name": "Fève de cacao"
+        },
+        {
+            "id": 11,
+            "name": "Cacao maigre"
+        },
+        {
+            "id": 12,
+            "name": "Canne à sucre"
+        },
+        {
+            "id": 13,
+            "name": "Sucre en poudre"
+        },
+        {
+            "id": 14,
+            "name": "Nutella 200g"
+        }
+    ],
+    "transactions": [
+        {
+            "productsIn": [
+                {
+                    "id": "1",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "2",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "GLAMAK-54512",
+            "buyerId": "FERR-36189",
+            "idTransaction": "Glass->Factory",
+            "transportType": "Truck"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "3",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "4",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "PALM-5122",
+            "buyerId": "FERR-36189",
+            "idTransaction": "PalmOil->Factory",
+            "transportType": "Plane"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "5",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "6",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "Walnut-74521",
+            "buyerId": "FERR-36189",
+            "idTransaction": "Walnut->Factory",
+            "transportType": "Plane"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "7",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "8",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "MilkProd-1478",
+            "buyerId": "FERR-36189",
+            "idTransaction": "Milk->Factory",
+            "transportType": "Truck"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "9",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "10",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "CocoaPodProd-9874",
+            "buyerId": "CocoaBeanMaker-46514",
+            "idTransaction": "CocoaPod->CocoaBean",
+            "transportType": "Plane"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "10",
+                    "idTransaction": "CocoaPod->CocoaBean"
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "11",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "CocoaBeanMaker-46514",
+            "buyerId": "FERR-36189",
+            "idTransaction": "Cocoa->Factory",
+            "transportType": "Train"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "12",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "13",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "FRASUGAR-123",
+            "buyerId": "FERR-36189",
+            "idTransaction": "Sugar->Factory",
+            "transportType": "Train"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "2",
+                    "idTransaction": "Glass->Factory"
+                },
+                {
+                    "id": "4",
+                    "idTransaction": "PalmOil->Factory"
+                },
+                {
+                    "id": "6",
+                    "idTransaction": "Walnut->Factory"
+                },
+                {
+                    "id": "8",
+                    "idTransaction": "Milk->Factory"
+                },
+                {
+                    "id": "11",
+                    "idTransaction": "Cocoa->Factory"
+                },
+                {
+                    "id": "13",
+                    "idTransaction": "Sugar->Factory"
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "14",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "FERR-36189",
+            "buyerId": "CARF-4578",
+            "idTransaction": "Factory->Shop",
+            "transportType": "Truck"
+        }
+    ],
+    "users": [
+        {
+            "username": "JohnDoe",
+            "email": "john@doe.com",
+            "password": "johndoe123456",
+            "createdAt": {
+                "year": "2018",
+                "month": "4",
+                "day": "23"
+            },
+            "history": [
+                {
+                    "barcode": "8001505005707",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "4",
+                        "day": "23"
+                    }
+                }
+            ],
+            "cart": [
+                {
+                    "barcode": "8001505005707",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2018",
+                        "month": "4",
+                        "day": "23"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 10,
+                    "ecoscore": "a"
+                }
+            ]
+        }
+    ]
+}

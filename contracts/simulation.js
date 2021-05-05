@@ -6,12 +6,11 @@ const Transaction = require("./transaction");
 const Transaction_artifact = require("./builds/transaction.json");
 var Transaction_contract = contract(Transaction_artifact);
 
-const Actor_artifact = require("./builds/transaction.json"); //?
-var Actor_contract = contract(Transaction_artifact); //?
-
 const ActorModel = require("../models/actor");
-const UserModel = require("../models/actor");
+const UserModel = require("../models/user");
 const ProductModel = require("../models/product");
+
+const simulationData = require("./simulationData.json");
 
 const mongoose = require("mongoose");
 
@@ -24,236 +23,143 @@ resetSimulation = () => {
     mongoose.connection.collections["products"].drop((err) => {
         console.log("Product collection dropped.");
     });
+    mongoose.connection.collections["users"].drop((err) => {
+        console.log("Users collection dropped.");
+    });
 };
 
 module.exports = {
-    //? Scénario :
-    // - Create 4 actors (glass maker, wallnut maker Italy and France, ferrerro factory, shop)
-    // - Create 4 transactions (glass->ferrero, wallnut1->ferrero, wallnut2->ferrero, ferrero->shop)
-
     main: async function () {
         // At the beginning of the simulation, reset all MongoDB data
         resetSimulation();
 
-        let passwordGlassMaker = hashPassword("password");
+        var mapIdInfoActor = new Map();
+        var mapIdAddressTransaction = new Map();
 
-        const GlassMaker = await Actor.createActor(
-            "GLAS-85025",
-            "Murano Soffiatore di Vetro",
-            "maker",
-            "45.458986",
-            "12.352345",
-            passwordGlassMaker
+        // --- ACTORS --- //
+        await Promise.all(
+            simulationData.actor.map(async (actor) => {
+                var passwordHash = hashPassword(actor.password);
+
+                var newActorContract = await Actor.createActor(
+                    actor.id,
+                    actor.name,
+                    actor.type,
+                    actor.latitude,
+                    actor.longitude,
+                    passwordHash
+                );
+
+                ActorModel.create({
+                    name: actor.name,
+                    email: actor.email,
+                    walletAddress: newActorContract.newWalletAccount,
+                    password: passwordHash,
+                    actorContractAddress: newActorContract.smartContractActorAddress,
+                });
+
+                mapIdInfoActor.set(actor.id, {
+                    walletAddress: newActorContract.newWalletAccount,
+                    actorContractAddress: newActorContract.smartContractActorAddress,
+                });
+            })
         );
 
-        const GlassMakerModel = ActorModel.create({
-            name: "Murano Soffiatore di Vetro",
-            email: "soffiatore@gmail.com",
-            walletAddress: GlassMaker.newWalletAccount,
-            password: passwordGlassMaker,
-            actorContractAddress: GlassMaker.smartContractActorAddress,
+        // --- PRODUCTS --- //
+        simulationData.products.forEach((product) => {
+            ProductModel.create({
+                _id: product.id,
+                productName: product.name,
+            });
         });
 
-        let passwordWallnutMaker1 = hashPassword("password");
+        // --- TRANSACTIONS --- //
+        for (var i = 0; i < simulationData.transactions.length; i++) {
+            var transaction = simulationData.transactions[i];
 
-        const WallnutMaker1 = await Actor.createActor(
-            "WALL-16872",
-            "Nocciola produttore di Madesimo",
-            "productor",
-            "46.43669",
-            "9.358031",
-            passwordWallnutMaker1
-        );
+            var productsIn = [];
+            transaction.productsIn.forEach((product) => {
+                var addressTransaction =
+                    product.idTransaction == ""
+                        ? "0x0000000000000000000000000000000000000000"
+                        : mapIdAddressTransaction.get(product.idTransaction);
 
-        const WallnutMaker1Model = ActorModel.create({
-            name: "Nocciola produttore di Madesimo",
-            email: "nocciola@gmail.com",
-            walletAddress: WallnutMaker1.newWalletAccount,
-            password: passwordWallnutMaker1,
-            actorContractAddress: WallnutMaker1.smartContractActorAddress,
+                productsIn.push({
+                    productId: product.id,
+                    addressTransaction: addressTransaction,
+                });
+            });
+
+            var productsOut = [];
+            transaction.productsOut.forEach((product) => {
+                var addressTransaction =
+                    product.idTransaction == ""
+                        ? "0x0000000000000000000000000000000000000000"
+                        : mapIdAddressTransaction.get(product.idTransaction);
+
+                productsOut.push({
+                    productId: product.id,
+                    addressTransaction: addressTransaction,
+                });
+            });
+
+            var newTransactionAddress = await Actor.createTransaction(
+                productsIn,
+                productsOut,
+                mapIdInfoActor.get(transaction.sellerId).actorContractAddress,
+                mapIdInfoActor.get(transaction.buyerId).actorContractAddress,
+                transaction.idTransaction,
+                Transaction_contract.enums.TransportType[transaction.transportType],
+                mapIdInfoActor.get(transaction.sellerId).walletAddress
+            );
+            mapIdAddressTransaction.set(transaction.idTransaction, newTransactionAddress);
+        }
+
+        // --- USERS --- //
+        simulationData.users.forEach((user) => {
+            var historyUser = [];
+            user.history.forEach((el) => {
+                historyUser.push({
+                    barcode: el.barcode,
+                    bcProductAddress: el.bcProductAddress,
+                    insertAt: new Date(
+                        (year = el.insertAt.year),
+                        (month = el.insertAt.month),
+                        (date = el.insertAt.day)
+                    ),
+                });
+            });
+
+            var cartUser = [];
+            user.cart.forEach((el) => {
+                cartUser.push({
+                    barcode: el.barcode,
+                    bcProductAddress: el.bcProductAddress,
+                    date: new Date(
+                        (year = el.date.year),
+                        (month = el.date.month),
+                        (date = el.date.day)
+                    ),
+                    quantity: el.quantity,
+                    carbonImpact: el.carbonImpact,
+                    ecoscore: el.ecoscore,
+                });
+            });
+
+            UserModel.create({
+                username: user.username,
+                email: user.email,
+                password: hashPassword(user.password),
+                createdAt: new Date(
+                    (year = user.createdAt.year),
+                    (month = user.createdAt.month),
+                    (date = user.createdAt.day)
+                ),
+                history: historyUser,
+                cart: cartUser,
+            });
         });
 
-        let passwordWallnutMaker2 = hashPassword("password");
-
-        const WallnutMaker2 = await Actor.createActor(
-            "WAL2-37919",
-            "Noisettes d'Ardèche",
-            "productor",
-            "44.407452",
-            "4.395401",
-            passwordWallnutMaker2
-        );
-
-        const WallnutMaker2Model = ActorModel.create({
-            name: "Noisettes d'Ardèche",
-            email: "ardeche@gmail.com",
-            walletAddress: WallnutMaker2.newWalletAccount,
-            password: passwordWallnutMaker2,
-            actorContractAddress: WallnutMaker2.smartContractActorAddress,
-        });
-
-        let passwordFerreroFactory = hashPassword("password");
-
-        const FerreroFactory = await Actor.createActor(
-            "FERR-36189",
-            "Ferrero Factory Milano",
-            "maker",
-            "45.4654219",
-            "9.1859243",
-            passwordFerreroFactory
-        );
-
-        const FerreroFactoryModel = ActorModel.create({
-            name: "Ferrero Factory Milano",
-            email: "factory@gmail.com",
-            walletAddress: FerreroFactory.newWalletAccount,
-            password: passwordFerreroFactory,
-            actorContractAddress: FerreroFactory.smartContractActorAddress,
-        });
-
-        let passwordGroceryShop = hashPassword("password");
-
-        const GroceryShop = await Actor.createActor(
-            "SHOP-36189",
-            "Alla Casa",
-            "shop",
-            "45.4408474",
-            "12.3155151",
-            passwordGroceryShop
-        );
-
-        const GroceryShopModel = ActorModel.create({
-            name: "Alla Casa",
-            email: "casa@gmail.com",
-            walletAddress: GroceryShop.newWalletAccount,
-            password: passwordGroceryShop,
-            actorContractAddress: GroceryShop.smartContractActorAddress,
-        });
-
-        const sable = ProductModel.create({
-            _id: 1,
-            productName: "Sable",
-        });
-
-        const potEnVerre = ProductModel.create({
-            _id: 2,
-            productName: "Pot en verre",
-        });
-
-        const noisetteMadesimo = ProductModel.create({
-            _id: 3,
-            productName: "Noisettes de Madesimo",
-        });
-
-        const noisetteMadesimoConcasse = ProductModel.create({
-            _id: 4,
-            productName: "Noisettes de Madesimo concassées",
-        });
-
-        const noisetteArdeche = ProductModel.create({
-            _id: 5,
-            productName: "Noisettes d'Ardèche",
-        });
-
-        const noisetteArdecheConcasse = ProductModel.create({
-            _id: 6,
-            productName: "Noisettes d'Ardèche concassées",
-        });
-
-        const nutella = ProductModel.create({
-            _id: 7,
-            productName: "Nutella 1kg",
-        });
-
-        const transaction1 = await Actor.createTransaction(
-            [
-                {
-                    productId: "1",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            [
-                {
-                    productId: "2",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            GlassMaker.smartContractActorAddress,
-            FerreroFactory.smartContractActorAddress, // string: Buyer eth address
-            "Glass->Factory", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Train, // Transaction.TransportType: Transport type
-            GlassMaker.newWalletAccount
-        );
-
-        const transaction2 = await Actor.createTransaction(
-            [
-                {
-                    productId: "3",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            [
-                {
-                    productId: "4",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            WallnutMaker1.smartContractActorAddress,
-            FerreroFactory.smartContractActorAddress, // string: Buyer eth address
-            "Wallnut1->Factory", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Charette, // Transaction.TransportType: Transport type
-            WallnutMaker1.newWalletAccount
-        );
-
-        const transaction3 = await Actor.createTransaction(
-            [
-                {
-                    productId: "5",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            [
-                {
-                    productId: "6",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            WallnutMaker2.smartContractActorAddress,
-            FerreroFactory.smartContractActorAddress, // string: Buyer eth address
-            "Wallnut2->Factory", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Truck, // Transaction.TransportType: Transport type
-            WallnutMaker2.newWalletAccount
-        );
-
-        const transaction4 = await Actor.createTransaction(
-            [
-                {
-                    productId: "2",
-                    addressTransaction: transaction1,
-                },
-                {
-                    productId: "4",
-                    addressTransaction: transaction2,
-                },
-                {
-                    productId: "6",
-                    addressTransaction: transaction3,
-                },
-            ],
-            [
-                {
-                    productId: "7",
-                    addressTransaction: "0x0000000000000000000000000000000000000000",
-                },
-            ],
-            FerreroFactory.smartContractActorAddress,
-            GroceryShop.smartContractActorAddress, // string: Buyer eth address
-            "Factory->Shop", // string: idTransaction,
-            Transaction_contract.enums.TransportType.Boat, // Transaction.TransportType: Transport type
-            FerreroFactory.newWalletAccount
-        );
-
-        //End of setup
-        console.log("Blockchain's simulation done");
+        console.log("Simulation initialized !");
     },
 };
