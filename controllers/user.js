@@ -11,9 +11,19 @@ exports.getUser = async (req, res, next) => {
 		if (userId == req.params.userId) {
 			// Get user informations
 			const user = await User.findById(userId);
+
+			let scannedProduct = user.history.length;
+
+			let cartedProduct = 0;
+			for (let i = 0; i < user.cart.length; i++) {
+				cartedProduct += user.cart[i].quantity;
+			}
+
 			res.status(200).json({
 				success: true,
 				data: user,
+				scannedProduct: scannedProduct,
+				cartedProduct: cartedProduct,
 			});
 			next();
 		} else {
