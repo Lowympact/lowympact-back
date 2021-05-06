@@ -250,7 +250,7 @@ exports.getUserStatistics = async (req, res, next) => {
                 }
 
                 user.cart.forEach((el) => {
-                    let index = Math.floor((now - el.date) / dateIntervalStep);
+                    let index = Math.max(Math.floor((now - el.date) / dateIntervalStep), 0);
                     if (index < statistics.carbonImpact.data.length && el.carbonImpact >= 0) {
                         statistics.carbonImpact.data[index].nbProducts += el.quantity;
                         statistics.carbonImpact.data[index].impact += el.quantity * el.carbonImpact;
