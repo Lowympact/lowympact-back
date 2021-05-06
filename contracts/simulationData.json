@@ -89,6 +89,60 @@
             "longitude": "3.4893986250979423",
             "password": "passsugar",
             "email": "FRASUGAR@FRASUGAR.com"
+        },
+        {
+            "id": "ASIAGO-4565884",
+            "name": "Nocciolata Rigoni di Asiago",
+            "type": "maker",
+            "latitude": "45.87588253149084",
+            "longitude": "11.509499716949955",
+            "password": "passasiago",
+            "email": "nocciolata@asiago.com"
+        },
+        {
+            "id": "WALNUTMAK-74125",
+            "name": "Produttore di nocciole di Novara",
+            "type": "productor",
+            "latitude": "45.44659812580219",
+            "longitude": "8.619900308754154",
+            "password": "passwalnutmak",
+            "email": "passwalnutmak@passwalnutmak.com"
+        },
+        {
+            "id": "LATTE-544536",
+            "name": "Produttore di latte di Thiene",
+            "type": "productor",
+            "latitude": "45.70261051953037",
+            "longitude": "11.481783214562387",
+            "password": "passlatte",
+            "email": "latteprodu@latteprodu.com"
+        },
+        {
+            "id": "COCOA-DOM-564684",
+            "name": "Saint Domingue Cocoa Industry",
+            "type": "productor",
+            "latitude": "18.53121612137376",
+            "longitude": "-70.04018705007404",
+            "password": "passcacaodom",
+            "email": "cacoadom@cacoadom.com"
+        },
+        {
+            "id": "COCOA-MAK-4684",
+            "name": "Processore di fave di cacao",
+            "type": "maker",
+            "latitude": "44.40335429217664",
+            "longitude": "8.943515256408078",
+            "password": "passfavecacao",
+            "email": "makfavecacao@makfavecacao.com"
+        },
+        {
+            "id": "ZUCCHERITA-968514",
+            "name": "Produttore di zucchero di Brindisi",
+            "type": "productor",
+            "latitude": "40.633757736331454",
+            "longitude": "17.938931236431436",
+            "password": "passbrindi",
+            "email": "zuccherita@zuccherita.com"
         }
     ],
     "products": [
@@ -118,7 +172,7 @@
         },
         {
             "id": 7,
-            "name": "Lait"
+            "name": "Lait de vache"
         },
         {
             "id": 8,
@@ -147,6 +201,46 @@
         {
             "id": 14,
             "name": "Nutella 200g"
+        },
+        {
+            "id": 15,
+            "name": "Noisettes"
+        },
+        {
+            "id": 16,
+            "name": "Noisettes concassées"
+        },
+        {
+            "id": 17,
+            "name": "Lait de vache"
+        },
+        {
+            "id": 18,
+            "name": "Lait écrémé"
+        },
+        {
+            "id": 19,
+            "name": "Cabosse"
+        },
+        {
+            "id": 20,
+            "name": "Fève de cacao"
+        },
+        {
+            "id": 21,
+            "name": "Cacao"
+        },
+        {
+            "id": 22,
+            "name": "Betterave sucrière"
+        },
+        {
+            "id": 23,
+            "name": "Sucre"
+        },
+        {
+            "id": 24,
+            "name": "Nocciolata bio"
         }
     ],
     "transactions": [
@@ -312,6 +406,126 @@
             "sellerId": "FERR-36189",
             "buyerId": "CARF-4578",
             "idTransaction": "Factory->Shop",
+            "transportType": "Truck"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "15",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "16",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "WALNUTMAK-74125",
+            "buyerId": "ASIAGO-4565884",
+            "idTransaction": "Walnut->Factory2",
+            "transportType": "Train"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "17",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "18",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "LATTE-544536",
+            "buyerId": "ASIAGO-4565884",
+            "idTransaction": "Milk->Factory2",
+            "transportType": "Truck"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "19",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "20",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "COCOA-DOM-564684",
+            "buyerId": "COCOA-MAK-4684",
+            "idTransaction": "CocoaPod->CocoaBean2",
+            "transportType": "Boat"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "20",
+                    "idTransaction": "CocoaPod->CocoaBean2"
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "21",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "COCOA-MAK-4684",
+            "buyerId": "ASIAGO-4565884",
+            "idTransaction": "Cocoa->Factory2",
+            "transportType": "Train"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "22",
+                    "idTransaction": ""
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "23",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "ZUCCHERITA-968514",
+            "buyerId": "ASIAGO-4565884",
+            "idTransaction": "Sugar->Factory2",
+            "transportType": "Train"
+        },
+        {
+            "productsIn": [
+                {
+                    "id": "16",
+                    "idTransaction": "Walnut->Factory2"
+                },
+                {
+                    "id": "18",
+                    "idTransaction": "Milk->Factory2"
+                },
+                {
+                    "id": "21",
+                    "idTransaction": "Cocoa->Factory2"
+                },
+                {
+                    "id": "23",
+                    "idTransaction": "Sugar->Factory2"
+                }
+            ],
+            "productsOut": [
+                {
+                    "id": "24",
+                    "idTransaction": ""
+                }
+            ],
+            "sellerId": "ASIAGO-4565884",
+            "buyerId": "CARF-4578",
+            "idTransaction": "Factory->Shop2",
             "transportType": "Truck"
         }
     ],
