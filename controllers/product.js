@@ -124,7 +124,7 @@ function computeTransportCO2Impact(traceabilityData) {
         long1 = parseFloat(element.seller.localisation.longitude);
         lat2 = parseFloat(element.buyer.localisation.latitude);
         long2 = parseFloat(element.buyer.localisation.longitude);
-        dist = getDistanceFromLatLonInKm(lat1, long1, lat1, long2);
+        dist = getDistanceFromLatLonInKm(lat1, long1, lat2, long2);
         let impactlocal = impactCoeff * dist;
         impactGlobal += impactlocal;
         element.dist = { value: dist, unit: "km" };
@@ -133,13 +133,21 @@ function computeTransportCO2Impact(traceabilityData) {
     return impactGlobal;
 }
 
-function getDistanceFromLatLonInKm(latitude1, longitude1, latitude2, longitude2) {
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295; //This is  Math.PI / 180
-    var c = Math.cos;
-    var a =
-        0.5 -
-        c((latitude2 - latitude1) * p) / 2 +
-        (c(latitude1 * p) * c(latitude2 * p) * (1 - c((longitude2 - longitude1) * p))) / 2;
-    var R = 6371; //  Earth distance in km so it will return the distance in km
-    return 2 * R * Math.asin(Math.sqrt(a));
+    var R = 6371; // km 
+
+    var x1 = lat2-lat1;
+    var dLat = x1 * p;  
+    var x2 = lon2-lon1;
+    var dLon = x2 * p;  
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                    Math.cos(lat1 * p) * Math.cos(lat2 * p) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2);  
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; 
+
+    console.log(lat1 + " " + lon1 + " " + lat2 + " " + lon2 + " " + d)
+
+    return d;
 }
