@@ -531,7 +531,7 @@
     ],
     "users": [
         {
-            "username": "JohnDoe",
+            "username": "John Doe",
             "email": "john@doe.com",
             "password": "johndoe123456",
             "createdAt": {
@@ -562,6 +562,719 @@
                     "quantity": 2,
                     "carbonImpact": 10,
                     "ecoscore": "a"
+                }
+            ]
+        },
+        {
+            "username": "Jean Doe",
+            "email": "jean@doe.com",
+            "password": "jeandoe123456",
+            "createdAt": {
+                "year": "2018",
+                "month": "4",
+                "day": "23"
+            },
+            "history": [
+                {
+                    "barcode": "3017620425035",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "4",
+                        "day": "23"
+                    }
+                },
+                {
+                    "barcode": "8001505005707",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "4",
+                        "day": "25"
+                    }
+                },
+                {
+                    "barcode": "8076809529419",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "6",
+                        "day": "10"
+                    }
+                },
+                {
+                    "barcode": "8000500217078",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "7",
+                        "day": "4"
+                    }
+                },
+                {
+                    "barcode": "3229820780955",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "7",
+                        "day": "12"
+                    }
+                },
+                {
+                    "barcode": "3045140280803",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "8",
+                        "day": "23"
+                    }
+                },
+                {
+                    "barcode": "3564700024164",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "10",
+                        "day": "2"
+                    }
+                },
+                {
+                    "barcode": "3095758857010",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "10",
+                        "day": "2"
+                    }
+                },
+                {
+                    "barcode": "3245361002240",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "11",
+                        "day": "13"
+                    }
+                },
+                {
+                    "barcode": "3083680767453",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2018",
+                        "month": "12",
+                        "day": "6"
+                    }
+                },
+                {
+                    "barcode": "3033710065066",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "1",
+                        "day": "14"
+                    }
+                },
+                {
+                    "barcode": "8000300211368",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "2",
+                        "day": "7"
+                    }
+                },
+                {
+                    "barcode": "3270160861576",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "3",
+                        "day": "26"
+                    }
+                },
+                {
+                    "barcode": "8714100766309",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "5",
+                        "day": "10"
+                    }
+                },
+                {
+                    "barcode": "3270160866281",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "6",
+                        "day": "14"
+                    }
+                },
+                {
+                    "barcode": "4045851007019",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "7",
+                        "day": "20"
+                    }
+                },
+                {
+                    "barcode": "3270160727810",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "8",
+                        "day": "9"
+                    }
+                },
+                {
+                    "barcode": "4001724819905",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "9",
+                        "day": "30"
+                    }
+                },
+                {
+                    "barcode": "4001724014317",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "10",
+                        "day": "5"
+                    }
+                },
+                {
+                    "barcode": "5000159492966",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2019",
+                        "month": "11",
+                        "day": "14"
+                    }
+                },
+                {
+                    "barcode": "3103220034804",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "1",
+                        "day": "12"
+                    }
+                },
+                {
+                    "barcode": "3222474437268",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "3",
+                        "day": "2"
+                    }
+                },
+                {
+                    "barcode": "3182180060320",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "4",
+                        "day": "23"
+                    }
+                },
+                {
+                    "barcode": "7311070032598",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "5",
+                        "day": "9"
+                    }
+                },
+                {
+                    "barcode": "7613036669146",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "6",
+                        "day": "12"
+                    }
+                },
+                {
+                    "barcode": "3387390406849",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "8",
+                        "day": "11"
+                    }
+                },
+                {
+                    "barcode": "3080216043807",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "9",
+                        "day": "29"
+                    }
+                },
+                {
+                    "barcode": "3119780268368",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "10",
+                        "day": "1"
+                    }
+                },
+                {
+                    "barcode": "7622210476296",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "11",
+                        "day": "16"
+                    }
+                },
+                {
+                    "barcode": "87157215",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2020",
+                        "month": "12",
+                        "day": "9"
+                    }
+                },
+                {
+                    "barcode": "8712100369582",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "1",
+                        "day": "20"
+                    }
+                },
+                {
+                    "barcode": "3760020503994",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "1",
+                        "day": "20"
+                    }
+                },
+                {
+                    "barcode": "3307131305170",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "2",
+                        "day": "11"
+                    }
+                },
+                {
+                    "barcode": "3159470204429",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "2",
+                        "day": "23"
+                    }
+                },
+                {
+                    "barcode": "3083680482042",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "3",
+                        "day": "3"
+                    }
+                },
+                {
+                    "barcode": "3487400003782",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "3",
+                        "day": "15"
+                    }
+                },
+                {
+                    "barcode": "3240930116120",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "4",
+                        "day": "12"
+                    }
+                },
+                {
+                    "barcode": "3083681081640",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "4",
+                        "day": "12"
+                    }
+                },
+                {
+                    "barcode": "3036811460396",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "1"
+                    }
+                },
+                {
+                    "barcode": "3181450100605",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "1"
+                    }
+                },
+                {
+                    "barcode": "3154230091677",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "3"
+                    }
+                },
+                {
+                    "barcode": "8712100882593",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "3"
+                    }
+                },
+                {
+                    "barcode": "5000159397292",
+                    "bcProductAddress": "",
+                    "insertAt": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "6"
+                    }
+                }
+            ],
+            "cart": [
+                {
+                    "barcode": "8001505005707",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2018",
+                        "month": "4",
+                        "day": "25"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 10,
+                    "ecoscore": "c"
+                },
+                {
+                    "barcode": "8076809529419",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2018",
+                        "month": "6",
+                        "day": "10"
+                    },
+                    "quantity": 4,
+                    "carbonImpact": 5,
+                    "ecoscore": "b"
+                },
+                {
+                    "barcode": "3045140280803",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2018",
+                        "month": "8",
+                        "day": "23"
+                    },
+                    "quantity": 3,
+                    "carbonImpact": 19,
+                    "ecoscore": "e"
+                },
+                {
+                    "barcode": "3095758857010",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2018",
+                        "month": "10",
+                        "day": "2"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 9,
+                    "ecoscore": "c"
+                },
+                {
+                    "barcode": "3245361002240",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2018",
+                        "month": "11",
+                        "day": "13"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 12,
+                    "ecoscore": "c"
+                },
+                {
+                    "barcode": "3033710065066",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "1",
+                        "day": "14"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 6,
+                    "ecoscore": "b"
+                },
+                {
+                    "barcode": "8000300211368",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "2",
+                        "day": "7"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 17,
+                    "ecoscore": "e"
+                },
+                {
+                    "barcode": "8714100766309",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "5",
+                        "day": "10"
+                    },
+                    "quantity": 3,
+                    "carbonImpact": 0.584,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "3270160866281",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "6",
+                        "day": "14"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 14.74,
+                    "ecoscore": "d"
+                },
+                {
+                    "barcode": "3270160727810",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "8",
+                        "day": "9"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 17,
+                    "ecoscore": "e"
+                },
+                {
+                    "barcode": "4001724819905",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "9",
+                        "day": "30"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 10.5,
+                    "ecoscore": "c"
+                },
+                {
+                    "barcode": "5000159492966",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2019",
+                        "month": "11",
+                        "day": "14"
+                    },
+                    "quantity": 5,
+                    "carbonImpact": 16.61,
+                    "ecoscore": "e"
+                },
+                {
+                    "barcode": "3222474437268",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2020",
+                        "month": "3",
+                        "day": "2"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 5.2,
+                    "ecoscore": "b"
+                },
+                {
+                    "barcode": "3182180060320",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2020",
+                        "month": "4",
+                        "day": "23"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 0.324,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "7311070032598",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2020",
+                        "month": "5",
+                        "day": "9"
+                    },
+                    "quantity": 3,
+                    "carbonImpact": 1.3,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "3387390406849",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2020",
+                        "month": "8",
+                        "day": "11"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 14,
+                    "ecoscore": "d"
+                },
+                {
+                    "barcode": "3080216043807",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2020",
+                        "month": "9",
+                        "day": "29"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 8.1,
+                    "ecoscore": "c"
+                },
+                {
+                    "barcode": "87157215",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2020",
+                        "month": "12",
+                        "day": "9"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 5.3,
+                    "ecoscore": "b"
+                },
+                {
+                    "barcode": "8712100369582",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "1",
+                        "day": "20"
+                    },
+                    "quantity": 3,
+                    "carbonImpact": 1.42,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "3760020503994",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "1",
+                        "day": "20"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 0.83,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "3159470204429",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "2",
+                        "day": "23"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 15.4,
+                    "ecoscore": "d"
+                },
+                {
+                    "barcode": "3083680482042",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "3",
+                        "day": "3"
+                    },
+                    "quantity": 4,
+                    "carbonImpact": 0.32,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "3487400003782",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "3",
+                        "day": "15"
+                    },
+                    "quantity": 1,
+                    "carbonImpact": 9.1,
+                    "ecoscore": "c"
+                },
+                {
+                    "barcode": "3083681081640",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "4",
+                        "day": "12"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 2.34,
+                    "ecoscore": "a"
+                },
+                {
+                    "barcode": "3036811460396",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "1"
+                    },
+                    "quantity": 3,
+                    "carbonImpact": 6.8,
+                    "ecoscore": "b"
+                },
+                {
+                    "barcode": "3154230091677",
+                    "bcProductAddress": "",
+                    "date": {
+                        "year": "2021",
+                        "month": "5",
+                        "day": "3"
+                    },
+                    "quantity": 2,
+                    "carbonImpact": 18.23,
+                    "ecoscore": "e"
                 }
             ]
         }
