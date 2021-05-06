@@ -109,7 +109,7 @@ function computeTransportCO2Impact(traceabilityData) {
                 impactCoeff = 0.065;
                 break;
             case "Boat":
-                impactCoeff = 0.7;
+                impactCoeff = 0.07;
                 break;
             case "Truck":
                 impactCoeff = 0.1;
