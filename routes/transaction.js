@@ -2,6 +2,8 @@ const express = require("express");
 
 const { checkJWT } = require("../middleware/checkJWT");
 
+const { checkApiKey } = require("../middleware/apiKey");
+
 const {
     createTransaction,
     acceptTransaction,
@@ -9,6 +11,9 @@ const {
 } = require("../controllers/transaction");
 
 const router = express.Router();
+
+// anything below will use the middleware
+router.use(checkApiKey);
 
 /**
  * @swagger
