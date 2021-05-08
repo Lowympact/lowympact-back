@@ -16,7 +16,7 @@ const { check } = require("express-validator");
 const router = express.Router();
 
 // anything below will use the middleware
-router.use(checkApiKey);
+// router.use(checkApiKey);
 
 /**
  * @swagger
