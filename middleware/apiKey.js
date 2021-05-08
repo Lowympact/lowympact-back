@@ -3,7 +3,7 @@
 //Check API_KEY equality
 exports.checkApiKey = (req, res, next) => {
     if (req.headers["api-key"]) {
-        let incomingApiKey = req.headers.api - key;
+        let incomingApiKey = req.headers["api-key"];
         if (incomingApiKey && process.env.LOWYMPACTAPI_KEY.trim() == incomingApiKey) {
             return next();
         }
