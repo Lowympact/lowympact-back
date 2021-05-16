@@ -40,6 +40,7 @@ const userRouter = require("./routes/user");
 const productRouter = require("./routes/product");
 const actorRouter = require("./routes/actor");
 const transactionRouter = require("./routes/transaction");
+const alternativesRouter = require("./routes/alternative");
 
 app.use((req, res, next) => {
     let origin = req.get("origin");
@@ -119,6 +120,7 @@ app.use("/api/v1/products", productRouter);
 app.use("/api/v1/actors", actorRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/transactions", transactionRouter);
+app.use("/api/v1/alternatives", alternativesRouter);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerInit()));
