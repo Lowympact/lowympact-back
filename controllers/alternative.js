@@ -13,10 +13,8 @@ exports.getAlternative = async (req, res, next) => {
             // Mock Front
 
             let alternativeModel = await AlternativeModel.findOne({
-                code_ciqual: req.params.codeCiqual,
+                ciqual_code: req.params.codeCiqual,
             });
-
-            console.log(alternativeModel); //reste null jsp pourquoi
 
             res.status(200).json({
                 success: true,
