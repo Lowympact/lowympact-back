@@ -64,6 +64,7 @@ exports.getUserHistory = async (req, res, next) => {
                             label: apiRes.data.product.ecoscore_grade,
                             barcode: p.barcode,
                             bcProductId: p.bcProductAddress,
+                            date: p.insertAt,
                         };
                     } else {
                         return {};
