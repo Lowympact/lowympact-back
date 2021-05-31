@@ -14,6 +14,7 @@ const {
     addProductInHistory,
     updateCart,
     itemCurrentCart,
+    addReview,
     getUserStatistics,
 } = require("../controllers/user");
 
@@ -245,6 +246,54 @@ router.route("/:userId/history").get(checkJWT, getUserHistory);
  *         description: A user with the specified ID was not found.
  */
 router.route("/:userId/history").put(checkJWT, addProductInHistory);
+
+/**
+ * @swagger
+ * /users/{userId}/review:
+ *   put:
+ *     summary: Add a review in user
+ *     tags:
+ *       - users
+ *     description: >
+ *       add a review
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: api-key
+ *         in: header
+ *         description: API-Key
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: true
+ *       - name: authorization
+ *         in: header
+ *         description: JWT for the user's session (can be stored in cookies)
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *           required: false
+ *       - name: userId
+ *         in: path
+ *         description: User Identifier
+ *         schema:
+ *           type: string
+ *           required: true
+ *       - name: message
+ *         in: body
+ *         description: review
+ *         schema:
+ *           type: string
+ *           required: true
+ *     responses:
+ *       200:
+ *         description: OK
+ *       401:
+ *         description: A user try to modify the history of another user
+ *       404:
+ *         description: A user with the specified ID was not found.
+ */
+router.route("/:userId/review").put(checkJWT, addReview);
 
 /**
  * @swagger

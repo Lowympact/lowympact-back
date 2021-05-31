@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema({
         minlength: 6,
         select: false, // not return the password
     },
+    review: [{ message: { type: String }, date: { type: Date, default: Date.now } }],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     createdAt: {

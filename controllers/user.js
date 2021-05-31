@@ -462,6 +462,37 @@ exports.addProductInHistory = async (req, res, next) => {
     }
 };
 
+exports.addReview = async (req, res, next) => {
+    try {
+        const userId = req.jwt.id;
+
+        if (userId == req.params.userId) {
+            const user = await User.findById(userId);
+
+            // Add product in user history
+            user.review.push({
+                message: req.body.message,
+                date: Date.now(),
+            });
+
+            user.save();
+
+            res.status(200).json({
+                success: true,
+            });
+            next();
+        } else {
+            // A user try to modify the history of another user
+            res.status(401).json({
+                message: "You're not authorized to access this route",
+            });
+            next();
+        }
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.updateCart = async (req, res, next) => {
     try {
         if (req.jwt.id == req.params.userId) {
